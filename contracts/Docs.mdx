@@ -1,0 +1,39 @@
+#DOCS
+
+##Platform.lua
+
+##DBs Required
+
+###Bridged Tokens DB
+    pid
+    ticker
+    Name
+    amount
+    yield
+
+###Projects
+    - Name
+    - UID
+    - Pid
+    - Token
+        ticker
+        Pid
+        Name
+        exchange rate with ao
+    - Staked
+        aoEth or aoSol w/t pid
+            total Staked (CALC)
+            per wallet Staked
+            inflow AO/time
+    - Off chain stuff
+    (consider making analysis different than usage mapped to same id)
+
+###User
+    - Wallet PID (unique)
+    - Staked (each token? or each project?)
+        projects Staked on
+            how much what, aoeth or aoSol
+            inflow of project token
+
+###Platform
+    - how much which token staked, ao yield per that token
