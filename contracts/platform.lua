@@ -122,7 +122,7 @@ Handlers.add(
             -- TRANSACTIONS.tokenID = msg.Tags.bridgedID, 
             -- TRANSACTIONS.projectID = msg.["X-ProjectID"]
             -- TRANSACTION.type = btf
-            -- TRANSACTION.status = pending
+            -- TRANSACTION.status = pending --IMPORTANT ADD
             -- store to project = X-ProjectID (?)
     end
 )
@@ -147,9 +147,10 @@ Handlers.add(
            -- log the info
                 -- from credit notic, find the tranfer msgID and find transaction
                     -- if exists, TRANSACTION.status = rejected 
+                    -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK??
         else
             -- log the info
-                -- from credit notic, find the tranfer msgID and find transaction
+                -- from credit notice, find the tranfer msgID and find transaction
                     -- TRANSACTION.status = fullfilled 
             -- ADD TO TOTALS function call
                 -- if i trvaerse entire transactins again and again, not optimized
@@ -183,7 +184,7 @@ Handlers.add(
     end
 )
 
--- NOTIF FOR PROJECT CRON IT CRON IT
+-- NOTIF FOR PROJECT (for my side CRON IT CRON IT)
 Handlers.add(
     "Notification",
     Handlers.utils.hasMatchingTag("Action", "Notif"),
@@ -239,7 +240,7 @@ Handlers.add(
         if not Users[msg.From] then
         
         else
-        -- Send back Bridged token
+        -- Send back Bridged token from FE
             ao.send(
                 Target = msg.Tags.bridgedID,
                 Action = "Transfer",

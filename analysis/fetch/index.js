@@ -37,6 +37,8 @@ async function fetchData() {
 
                 const data = response.data;
                 console.log(data)
+                console.log(data)
+                console.log(data)
                 // if (data.data && data.data.transactions && data.data.transactions.count) {
                 //     totalCount += data.data.transactions.count;
                 // }
