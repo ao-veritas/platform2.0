@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@permaweb/aoconnect": "^0.0.59",
     "axios": "^1.7.5"
   }
 }

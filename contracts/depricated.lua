@@ -1,0 +1,14 @@
+-- Handlers.add(
+--     "test",
+--     Handlers.utils.hasMatchingTag("Action", "Test"),
+--     function(msg)
+--         local test = "abc"
+--         local write_res = sql_write([[INSERT INTO Users (Name) VALUES (?)]], test)
+--         local p = sql_run([[SELECT * FROM Users Where Name = "abc" ]])
+--         for _, pkg in ipairs(p) do
+--             print(pkg)
+--         end
+--         print(tostring(p))
+--     end
+-- )
+    
