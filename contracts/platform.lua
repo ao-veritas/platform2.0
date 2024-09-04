@@ -130,36 +130,45 @@ Handlers.add(
 
 
 -- STAKE BY USER
--- Handlers.add(
---     "Staked",
---     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
---     function(msg)
---         -- CHECK USER TABLE, if not then add or send notif to register (?)
---         if not Users[msg.Sender] then Users[msg.Sender] = "0" end
---         -- bridged token id = msg.From check against verified tokens
---         if not Bridged[msg.From] then
---             -- SHALL WE BE SENDING SECURITY IMPLEMENTATIONS (?)
---             ao.send(
---                 Target = msg.From,
---                 Action = "Transfer",
---                 Recipient = msg.Sender,
---                 Quantity = msg.Quantity,
---                 ["X-Data"] = "not bridged token"
---             )
---            -- log the info
---                 -- from credit notic, find the tranfer msgID and find transaction
---                     -- if exists, TRANSACTION.status = rejected 
---                     -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK??
---         else
---             -- log the info
---                 -- from credit notice, find the tranfer msgID and find transaction
---                     -- TRANSACTION.status = fullfilled 
---             -- ADD TO TOTALS function call
---                 -- if i trvaerse entire transactins again and again, not optimized
---         end
---         -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
---     end
--- )
+Handlers.add(
+    "Staked",
+    Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
+    function(msg)
+        local tags = msg.Tags 
+        -- CHECK USER TABLE, if not then add or send notif to register (?)
+        local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
+        for _, i in ipairs(exists) do
+            print(i.value_exists);
+            if i.value_exists>0 then
+                Handlers.utils.reply("User already Exists")(msg);
+             else
+                local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
+            end
+        end
+        -- bridged token id = msg.From check against verified tokens
+        if not Bridged[msg.From] then
+            -- SHALL WE BE SENDING SECURITY IMPLEMENTATIONS (?)
+            ao.send(
+                Target = msg.From,
+                Action = "Transfer",
+                Recipient = msg.Sender,
+                Quantity = msg.Quantity,
+                ["X-Data"] = "not bridged token"
+            )
+           -- log the info
+                -- from credit notic, find the tranfer msgID and find transaction
+                    -- if exists, TRANSACTION.status = rejected 
+                    -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK??
+        else
+            -- log the info
+                -- from credit notice, find the tranfer msgID and find transaction
+                    -- TRANSACTION.status = fullfilled 
+            -- ADD TO TOTALS function call
+                -- if i trvaerse entire transactins again and again, not optimized
+        end
+        -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
+    end
+)
 
 -- -- AO RECIEVE
 -- Handlers.add(
