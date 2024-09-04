@@ -11,4 +11,31 @@
 --         print(tostring(p))
 --     end
 -- )
-    
+-- Handlers.add(
+--     "Stake",
+--     Handlers.utils.hasMatchingTag("Action", "Stake"),
+--     function(msg)
+--         -- CHECK USER TABLE, if not then add or send notif to register (?)
+--         if not Users[msg.From] then Users[msg.Sender] = "0" end 
+--         -- FE sends transfer message as below
+--             -- ao.send(
+--             --     Target = msg.Tags.bridgedID,
+--             --     Action = "Transfer",
+--             --     Recipient = platformID,
+--             --     Quantity = msg.Tags.Quantity,
+--             --     ["X-Action"] = "Staked"
+--             -- )
+--             -- THIS CREATES A MSG ID
+--         -- log the info
+--             -- TRANSACTIONS.ID = msg.Tags.msgID
+--             -- TRANSACTIONS.amount= msg.Tags.Quantity, 
+--             -- TRANSACTIONS.userID= msg.From, 
+--             -- TRANSACTIONS.tokenID = msg.Tags.bridgedID, 
+--             -- TRANSACTIONS.projectID = msg.["X-ProjectID"]
+--             -- TRANSACTION.type = btf
+--             -- TRANSACTION.status = pending --IMPORTANT ADD
+--             -- store to project = X-ProjectID (?)
+--     end
+-- )
+ 
+

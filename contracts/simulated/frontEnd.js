@@ -13,3 +13,13 @@ const dummyFrontEnd = async({quantity, bridgedTokenID, projectID}) => {
     })
     
 }
+const registerUser = async({userID}) => {
+    const msgID = await message({
+        process: PLATFORMID,
+        signer: createDataItemSigner(window.arweaveWallet),
+        tags: [
+            { name: "Action", value: "Register-User" },
+            { name: "UserID", value: userID.toString() }, 
+        ] 
+    })
+}

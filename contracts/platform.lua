@@ -6,11 +6,13 @@ base64 = require(".base64")
 sqlite3 = require("lsqlite3")
 db = db or sqlite3.open_memory()
 AOTOKENID = "abc"
-
+    
+-- DROP TABLE IF EXISTS Users;
 db:exec([[
+    DROP TABLE IF EXISTS Transactions;
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        Name TEXT NOT NULL
+        UserID TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS TRANSACTIONS (
         Timestamp INTEGER NOT NULL, 
@@ -96,54 +98,38 @@ end
 
 
 
--- -- REGISTER USER (3rd party? lol no)
+-- REGISTER USER (3rd party? lol no)
+Handlers.add(
+    "RegisterUser",
+    Handlers.utils.hasMatchingTag("Action", "Register-User"),
+    function(msg)
+        local tags = msg.Tags
+         -- CHECK USER TABLE, if not then add
+        local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.UserID);
+        for _, i in ipairs(exists) do
+            print(i.value_exists);
+            if i.value_exists>0 then
+                Handlers.utils.reply("User already Exists")(msg);
+                print("nope")
+            else
+                local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
+            end
+        end
+        -- if not Users[msg.From] then Users[msg.From] = "0" end
+        -- ADD OTHER INFO
+    end
+)
+
 -- Handlers.add(
---     "RegisterUser",
---     Handlers.utils.hasMatchingTag("Action", "Register-User"),
+--     "Create-Transaction",
+--     Handlers.utils.hasMatchingTag("Action", "Create-Transaction"),
 --     function(msg)
---         -- local tags = msg.Tags
---          -- CHECK USER TABLE, if not then add
---         if not Users[msg.From] then Users[msg.From] = "0" end
---         -- ADD OTHER INFO
+-- -- maybe this needs to be just a functiona dn not a handler
 --     end
 -- )
 
-Handlers.add(
-    "Create-Transaction",
-    Handlers.utils.hasMatchingTag("Action", "Create-Transaction"),
-    function(msg)
--- maybe this needs to be just a functiona dn not a handler
-    end
-)
 
-Handlers.add(
-    "Stake",
-    Handlers.utils.hasMatchingTag("Action", "Stake"),
-    function(msg)
-        -- CHECK USER TABLE, if not then add or send notif to register (?)
-        if not Users[msg.From] then Users[msg.Sender] = "0" end 
-        -- FE sends transfer message as below
-            -- ao.send(
-            --     Target = msg.Tags.bridgedID,
-            --     Action = "Transfer",
-            --     Recipient = platformID,
-            --     Quantity = msg.Tags.Quantity,
-            --     ["X-Action"] = "Staked"
-            -- )
-            -- THIS CREATES A MSG ID
-        -- log the info
-            -- TRANSACTIONS.ID = msg.Tags.msgID
-            -- TRANSACTIONS.amount= msg.Tags.Quantity, 
-            -- TRANSACTIONS.userID= msg.From, 
-            -- TRANSACTIONS.tokenID = msg.Tags.bridgedID, 
-            -- TRANSACTIONS.projectID = msg.["X-ProjectID"]
-            -- TRANSACTION.type = btf
-            -- TRANSACTION.status = pending --IMPORTANT ADD
-            -- store to project = X-ProjectID (?)
-    end
-)
-
--- -- STAKE BY USER
+-- STAKE BY USER
 -- Handlers.add(
 --     "Staked",
 --     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
