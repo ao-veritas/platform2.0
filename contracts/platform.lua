@@ -1,7 +1,7 @@
 -- local utils = require(".utils")
 local json = require("json")
 -- local constants = require("helpers.constants")
--- local verifiedBridgedToken = require("utils.bridgedTokens")
+local verifiedBridgedToken = require("utils.bridgedTokens")
 base64 = require(".base64")
 sqlite3 = require("lsqlite3")
 db = db or sqlite3.open_memory()
@@ -14,15 +14,15 @@ db:exec([[
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         UserID TEXT NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS TRANSACTIONS (
-        Timestamp INTEGER NOT NULL, 
-        TransID TEXT NOT NULL
-        UserID TEXT NOT NULL,
-        TokenID TEXT NOT NULL,
-        Quantity INTEGER NOT NULL,
-        ProjectID TEXT NOT NULL,
-        Status TEXT NOT NULL,
-        Type TEXT NOT NULL
+    CREATE TABLE IF NOT EXISTS Transactions (
+        Timestamp TEXT, 
+        TransID TEXT,
+        UserID TEXT,
+        TokenID TEXT,
+        Quantity TEXT,
+        ProjectID TEXT,
+        Status TEXT,
+        Type TEXT
     );
 ]])
 
@@ -30,13 +30,14 @@ function sql_run(query, ...)
     print("enter sql run1")
     local m = {}
     local stmt = db:prepare(query)
+    print(stmt);
     if stmt then
-        print("enter stmt1")
+        -- print("enter stmt1")
         local bind_res = stmt:bind_values(...)
         assert(bind_res, "❌[bind error] " .. db:errmsg())
         for row in stmt:nrows() do
             table.insert(m, row)
-            print("enter for loop1")
+            -- print("enter for loop1")
         end
         stmt:finalize()
     end
@@ -46,11 +47,14 @@ end
 function sql_write(query, ...)
     print("enter sql write")
     local stmt = db:prepare(query)
+    print(stmt)
     if stmt then
         print("enter stmt2")
         local bind_res = stmt:bind_values(...)
+        print(bind_res)
         assert(bind_res, "❌[bind error] " .. db:errmsg())
         local step = stmt:step()
+        print(step)
         assert(step == sqlite3.DONE, "❌[write error] " .. db:errmsg())
         stmt:finalize()
     end
@@ -58,45 +62,7 @@ function sql_write(query, ...)
     return db:changes()
 end
 
-
-
-
--- DUMMY SQL TABLE IDK
--- USER:
---     userID
--- --    transactions table (?)
--- PROJECT:
---     projectID
---     pTokenID
---     usersStaked
--- TRANSACTIONS:
---     {
---         time(?)
---         userID
---         tokenID
---         Quantity
---         projectID
---         status
---         enum type{
---             btf -- bridged to fa
---             atf -- ao to fa
---             ftp -- fa to proj
---             ptf -- proj to fa
---             ftu -- fa to user
---         }
---     }
--- BRIDGEDTOKENS: 
---     AOETH: id
---     AOSOL: id
--- TOTALS:
---     shall this be on the pid or bid (?)
---     projectID.bridgedID.Quantity
-
-
 -- NOTE: cant update totals, what if ao triggering notif, is last 5 min wala calculation and more has come since
-
-
-
 
 -- REGISTER USER (3rd party? lol no)
 Handlers.add(
@@ -110,7 +76,7 @@ Handlers.add(
             print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("User already Exists")(msg);
-                print("nope")
+                return;
             else
                 local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
             end
@@ -120,52 +86,69 @@ Handlers.add(
     end
 )
 
--- Handlers.add(
---     "Create-Transaction",
---     Handlers.utils.hasMatchingTag("Action", "Create-Transaction"),
---     function(msg)
--- -- maybe this needs to be just a functiona dn not a handler
---     end
--- )
-
 
 -- STAKE BY USER
 Handlers.add(
     "Staked",
     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
     function(msg)
+        print("CREDIT NOTICE ENTERED STAKED")
         local tags = msg.Tags 
-        -- CHECK USER TABLE, if not then add or send notif to register (?)
+        -- -- CHECK USER TABLE, if not then add or send notif to register (?)
         local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
         for _, i in ipairs(exists) do
             print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("User already Exists")(msg);
+                break;
              else
-                local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
+                local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.Sender)
             end
         end
         -- bridged token id = msg.From check against verified tokens
-        if not Bridged[msg.From] then
-            -- SHALL WE BE SENDING SECURITY IMPLEMENTATIONS (?)
-            ao.send(
+        local found = false
+        for k, v in pairs(verifiedBridgedToken) do
+            print("IN CHECK BRIDGED")
+            if v == msg.From then
+                found = true
+                print("FOUND TRUE")
+                break
+            end
+        end
+        if not found then
+                -- SHALL WE BE SENDING SECURITY IMPLEMENTATIONS, cause what if its a manual message, but do we care if someone ahs access to a token? will we be holding?
+            ao.send({
                 Target = msg.From,
                 Action = "Transfer",
                 Recipient = msg.Sender,
                 Quantity = msg.Quantity,
                 ["X-Data"] = "not bridged token"
-            )
-           -- log the info
-                -- from credit notic, find the tranfer msgID and find transaction
-                    -- if exists, TRANSACTION.status = rejected 
-                    -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK??
-        else
-            -- log the info
-                -- from credit notice, find the tranfer msgID and find transaction
-                    -- TRANSACTION.status = fullfilled 
+            })
+                -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK (?)
+            print("IN NOT FOUND")
+            return 
+        end
+        -- log the info
+        -- print("TEST PRINTS")
+        local projectID
+        for k,v in pairs(msg.Tags) do 
+            if k == "X-ProjectID" then
+                projectID = v
+                -- print("projectID" .. projectID .. ":" .. type(projectID))
+                break
+            end
+        end
+        -- print("time" .. msg.Timestamp .. ":" .. type(tostring(msg.Timestamp)))
+        -- print("transID" .. msg.Id .. ":" ..type(msg.Id))
+        -- print("UserID" .. tags.Sender .. ":".. type(tags.Sender))
+        -- print("TokenID" .. msg.From .. ":" ..type(msg.From))
+        -- print("Quantityt" .. tags.Quantity .. ":" ..type(tags.Quantity))
+        -- print("TEST PRINTS END")
+        local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, projectID, "fulfilled", "btf")
+            -- store to project = X-ProjectID (?)
             -- ADD TO TOTALS function call
                 -- if i trvaerse entire transactins again and again, not optimized
-        end
+        -- end
         -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
     end
 )
@@ -173,7 +156,6 @@ Handlers.add(
 -- -- AO RECIEVE
 -- Handlers.add(
 --     "IncomingAO",
---     -- HOW DO I ENSURE???
 --     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "AO_PROCESS_ID"),
 --     function(msg)
 --         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB

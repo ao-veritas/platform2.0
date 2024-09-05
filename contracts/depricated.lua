@@ -39,3 +39,51 @@
 -- )
  
 
+-- DUMMY SQL TABLE IDK
+-- USER:
+--     userID
+-- --    transactions table (?)
+-- PROJECT:
+--     projectID
+--     pTokenID
+--     usersStaked
+-- TRANSACTIONS:
+--     {
+--         time(?)
+--         userID
+--         tokenID
+--         Quantity
+--         projectID
+--         status
+--         enum type{
+--             btf -- bridged to fa
+--             atf -- ao to fa
+--             ftp -- fa to proj
+--             ptf -- proj to fa
+--             ftu -- fa to user
+--         }
+--     }
+-- BRIDGEDTOKENS: 
+--     AOETH: id
+--     AOSOL: id
+-- TOTALS:
+--     shall this be on the pid or bid (?)
+--     projectID.bridgedID.Quantity
+
+-- Handlers.add(
+--     "Create-Transaction",
+--     Handlers.utils.hasMatchingTag("Action", "Create-Transaction"),
+--     function(msg)
+-- -- maybe this needs to be just a functiona dn not a handler
+--     end
+-- )
+
+
+
+-- Handlers.add(
+--     "test",
+--     Handlers.utils.hasMatchingTag("Action", "Test"),
+--     function(msg)
+--         print(verifiedBridgedToken)
+--     end
+-- )
