@@ -97,3 +97,8 @@ TEST PRINTS FOR STAKED TRANSACTION Logo
 -- print("TokenID" .. msg.From .. ":" ..type(msg.From))
 -- print("Quantityt" .. tags.Quantity .. ":" ..type(tags.Quantity))
 -- print("TEST PRINTS END")
+
+
+user1: dE7vTrHgqAUK7h2zOVq_RxoRA8V5roKY9mPTD8blUlA
+user2: 6VFFgcNeclukALVW1EUujnuDClc3rdKGarJyEQZzsJA
+testmsg: Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="asdfg", Quantity = "10000000000", Recipient="8gcUYtSBI8iqQiq_YnIzPT_svY-hwEL3_gTWz0ps--I", ["X-Action"]="Staked"})
