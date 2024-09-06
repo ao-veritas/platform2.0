@@ -1,3 +1,4 @@
+-- 8gcUYtSBI8iqQiq_YnIzPT_svY-hwEL3_gTWz0ps--I
 -- local utils = require(".utils")
 local json = require("json")
 -- local constants = require("helpers.constants")
@@ -11,6 +12,7 @@ AOTOKENID = "abc"
 db:exec([[
     DROP TABLE IF EXISTS Transactions;
     DROP TABLE IF EXISTS Projects;
+    DROP TABLE IF EXISTS Users;
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         UserID TEXT NOT NULL
@@ -135,7 +137,6 @@ Handlers.add(
             return 
         end
         -- log the info
-        -- print("TEST PRINTS")
         local projectID
         for k,v in pairs(msg.Tags) do 
             if k == "X-ProjectID" then
@@ -151,7 +152,6 @@ Handlers.add(
                             local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], projectID, "nil", 0)
                         end
                     end
-                -- print("projectID" .. projectID .. ":" .. type(projectID))
                 break
             end
         end
@@ -163,39 +163,35 @@ Handlers.add(
         end
         print("new total: " .. newTotal);
         local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
-        -- local project_change = sql_write([[INSERT INTO Projects (TaoEthStaked) VALUES (?)]], )    
-        -- store to project = X-ProjectID (?)
-            -- ADD TO TOTALS function call
-                -- if i trvaerse entire transactins again and again, not optimized
-        -- end
         -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
     end
 )
 
--- -- AO RECIEVE
--- Handlers.add(
---     "IncomingAO",
---     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "nA_AOvjSqUvwqwO4Loc4oQZah0kzINm45cQ9Z0NZjq8"),
---     function(msg)
---         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
---         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
---         -- Send alert if not right
---         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
---             -- traverse totals table, for each projectID
---                 ao.send(
---                     Target = projectID,
---                     Action = Notif,
---                     Quantity = TOTALS.projectID.AOQuantity,
---                 )
---                 -- log the info
---                     -- TRANSACTIONS.amount= TOTALS.projectID.AOQuantity, 
---                     -- TRANSACTIONS.userID= pid, 
---                     -- TRANSACTIONS.tokenID = ptid, 
---                     -- TRANSACTIONS.projectID = pid
---                     -- TRANSACTION.type = ptf
---                     -- TRANSACTION.status = pending
---     end
--- )
+-- AO RECIEVE
+Handlers.add(
+    "AOReciever",
+    Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "AwpQ2zCfm0iyoUg5y-iYqldYsCnssrVzRcwBuKBamI4"),
+    function(msg)
+        -- local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
+        print("TEST")
+        -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
+        -- Send alert if not right
+        -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
+            -- traverse totals table, for each projectID
+                -- ao.send(
+                --     Target = projectID,
+                --     Action = Notif,
+                --     Quantity = TOTALS.projectID.AOQuantity,
+                -- )
+                -- log the info
+                    -- TRANSACTIONS.amount= TOTALS.projectID.AOQuantity, 
+                    -- TRANSACTIONS.userID= pid, 
+                    -- TRANSACTIONS.tokenID = ptid, 
+                    -- TRANSACTIONS.projectID = pid
+                    -- TRANSACTION.type = ptf
+                    -- TRANSACTION.status = pending
+    end
+)
 
 -- -- NOTIF FOR PROJECT (for my side CRON IT CRON IT)
 -- Handlers.add(

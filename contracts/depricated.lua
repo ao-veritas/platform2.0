@@ -88,7 +88,9 @@
 --     end
 -- )
 
-TEST PRINTS FOR STAKED TRANSACTION Logo       
+TEST PRINTS FOR STAKED TRANSACTION Logo 
+        -- print("TEST PRINTS")      
+-- print("projectID" .. projectID .. ":" .. type(projectID))
 -- print("time" .. msg.Timestamp .. ":" .. type(tostring(msg.Timestamp)))
 -- print("transID" .. msg.Id .. ":" ..type(msg.Id))
 -- print("UserID" .. tags.Sender .. ":".. type(tags.Sender))
