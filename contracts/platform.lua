@@ -10,6 +10,7 @@ AOTOKENID = "abc"
 -- DROP TABLE IF EXISTS Users;
 db:exec([[
     DROP TABLE IF EXISTS Transactions;
+    DROP TABLE IF EXISTS Projects;
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         UserID TEXT NOT NULL
@@ -24,6 +25,11 @@ db:exec([[
         Status TEXT,
         Type TEXT
     );
+    CREATE TABLE IF NOT EXISTS Projects (
+        ProjectID TEXT,
+        ProjectTokenID TEXT,
+        TaoEthStaked INTEGER
+    )
 ]])
 
 function sql_run(query, ...)
@@ -95,8 +101,8 @@ Handlers.add(
         print("CREDIT NOTICE ENTERED STAKED")
         local tags = msg.Tags 
         -- -- CHECK USER TABLE, if not then add or send notif to register (?)
-        local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
-        for _, i in ipairs(exists) do
+        local user_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
+        for _, i in ipairs(user_exists) do
             print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("User already Exists")(msg);
@@ -134,18 +140,31 @@ Handlers.add(
         for k,v in pairs(msg.Tags) do 
             if k == "X-ProjectID" then
                 projectID = v
+                -- check if project exists, add if not
+                    local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], projectID);
+                    for _, i in ipairs(project_exists) do
+                        print(i.value_exists);
+                        if i.value_exists>0 then
+                            Handlers.utils.reply("Proj already Exists")(msg);
+                            break;
+                         else
+                            local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], projectID, "nil", 0)
+                        end
+                    end
                 -- print("projectID" .. projectID .. ":" .. type(projectID))
                 break
             end
         end
-        -- print("time" .. msg.Timestamp .. ":" .. type(tostring(msg.Timestamp)))
-        -- print("transID" .. msg.Id .. ":" ..type(msg.Id))
-        -- print("UserID" .. tags.Sender .. ":".. type(tags.Sender))
-        -- print("TokenID" .. msg.From .. ":" ..type(msg.From))
-        -- print("Quantityt" .. tags.Quantity .. ":" ..type(tags.Quantity))
-        -- print("TEST PRINTS END")
         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, projectID, "fulfilled", "btf")
-            -- store to project = X-ProjectID (?)
+        local currentTotal = sql_run([[SELECT TaoEthStaked FROM Projects WHERE ProjectID = (?)]], projectID)
+        local newTotal
+        for _, i in ipairs(currentTotal) do
+            newTotal = tonumber(i.TaoEthStaked) + tonumber(tags.Quantity)
+        end
+        print("new total: " .. newTotal);
+        local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
+        -- local project_change = sql_write([[INSERT INTO Projects (TaoEthStaked) VALUES (?)]], )    
+        -- store to project = X-ProjectID (?)
             -- ADD TO TOTALS function call
                 -- if i trvaerse entire transactins again and again, not optimized
         -- end
@@ -156,8 +175,9 @@ Handlers.add(
 -- -- AO RECIEVE
 -- Handlers.add(
 --     "IncomingAO",
---     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "AO_PROCESS_ID"),
+--     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "nA_AOvjSqUvwqwO4Loc4oQZah0kzINm45cQ9Z0NZjq8"),
 --     function(msg)
+--         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
 --         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
 --         -- Send alert if not right
 --         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below

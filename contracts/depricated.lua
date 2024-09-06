@@ -87,3 +87,11 @@
 --         print(verifiedBridgedToken)
 --     end
 -- )
+
+TEST PRINTS FOR STAKED TRANSACTION Logo       
+-- print("time" .. msg.Timestamp .. ":" .. type(tostring(msg.Timestamp)))
+-- print("transID" .. msg.Id .. ":" ..type(msg.Id))
+-- print("UserID" .. tags.Sender .. ":".. type(tags.Sender))
+-- print("TokenID" .. msg.From .. ":" ..type(msg.From))
+-- print("Quantityt" .. tags.Quantity .. ":" ..type(tags.Quantity))
+-- print("TEST PRINTS END")
