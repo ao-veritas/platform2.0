@@ -99,7 +99,7 @@ Handlers.add(
     "Staked",
     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
     function(msg)
-        print("CREDIT NOTICE ENTERED STAKED")
+        -- print("CREDIT NOTICE ENTERED STAKED")
         local tags = msg.Tags 
         -- -- CHECK USER TABLE, if not then add or send notif to register (?)
         local user_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
@@ -112,13 +112,13 @@ Handlers.add(
                 local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.Sender)
             end
         end
-        -- bridged token id = msg.From check against verified tokens
+        -- check From against verified tokens
         local found = false
         for k, v in pairs(verifiedBridgedToken) do
-            print("IN CHECK BRIDGED")
+            -- print("IN CHECK BRIDGED")
             if v == msg.From then
                 found = true
-                print("FOUND TRUE")
+                -- print("FOUND TRUE")
                 break
             end
         end
@@ -132,7 +132,7 @@ Handlers.add(
                 ["X-Data"] = "not bridged token"
             })
                 -- SHALL I BE CREATING ANOTHER TRANSACTION OF SENDING BACK (?)
-            print("IN NOT FOUND")
+            -- print("IN NOT FOUND")
             return 
         end
         -- log the info
@@ -145,7 +145,7 @@ Handlers.add(
                     for _, i in ipairs(project_exists) do
                         print(i.value_exists);
                         if i.value_exists>0 then
-                            Handlers.utils.reply("Proj already Exists")(msg);
+                            -- Handlers.utils.reply("Proj already Exists")(msg);
                             break;
                          else
                             local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], projectID, "nil", 0)
@@ -160,7 +160,7 @@ Handlers.add(
         for _, i in ipairs(currentTotal) do
             newTotal = tonumber(i.TaoEthStaked) + tonumber(tags.Quantity)
         end
-        print("new total: " .. newTotal);
+        -- print("new total: " .. newTotal);
         local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
         -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
     end
