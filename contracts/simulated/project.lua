@@ -6,14 +6,15 @@ Handlers.add(
     Handlers.utils.hasMatchingTag("Action", "Notif") and Handlers.utils.hasMatchingTag("From-Process", FUNDARSID),
     function(msg)
         local tags = msg.Tags
+        local TotalPTokensQuantity = tags.Quantity
+        -- print(typeof(TotalPTokensQuantity))
+        print(TotalPTokensQuantity)
         print("notif enter")
-        -- ITERATE through bridged tokens
-            -- ao.send({
-            --     Target = PROJECTTOKENID,
-            --     Action = "Transfer",
-            --     Quantity = tags.TotalPTokensQuantity,
-            --     Recipient = FUNDARSID
-            -- })
-        
+            ao.send({
+                Target = PROJECTTOKENID,
+                Action = "Transfer",
+                Quantity = TotalPTokensQuantity,
+                Recipient = FUNDARSID
+            })
     end
 )

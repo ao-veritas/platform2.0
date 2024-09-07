@@ -8,11 +8,10 @@ sqlite3 = require("lsqlite3")
 db = db or sqlite3.open_memory()
 AOTOKENID = "abc"
     
+-- DROP TABLE IF EXISTS Transactions;
+-- DROP TABLE IF EXISTS Projects;
 -- DROP TABLE IF EXISTS Users;
 db:exec([[
-    DROP TABLE IF EXISTS Transactions;
-    DROP TABLE IF EXISTS Projects;
-    DROP TABLE IF EXISTS Users;
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         UserID TEXT NOT NULL
@@ -179,10 +178,14 @@ Handlers.add(
         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
             -- traverse totals table, for each projectID
             local projectsTable = sql_run([[SELECT * FROM Projects]])
+            print(projectsTable)
             local aoQuantity
-            for _, i in projectsTable do
+            for _, i in ipairs(projectsTable) do
                 -- some formulae to calculate 
-                aoQuantity = i.TaoEthStaked/10
+                print(i)
+                aoQuantity = i.TaoEthStaked
+                print("tao:" .. i.TaoEthStaked)
+                print("aoQuantity:" .. tostring(aoQuantity))
                 ao.send({
                     Target = i.ProjectID,
                     Action = "Notif",
