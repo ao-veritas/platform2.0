@@ -101,4 +101,4 @@ TEST PRINTS FOR STAKED TRANSACTION Logo
 
 user1: dE7vTrHgqAUK7h2zOVq_RxoRA8V5roKY9mPTD8blUlA
 user2: 6VFFgcNeclukALVW1EUujnuDClc3rdKGarJyEQZzsJA
-testmsg: Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="asdfg", Quantity = "10000000000", Recipient="8gcUYtSBI8iqQiq_YnIzPT_svY-hwEL3_gTWz0ps--I", ["X-Action"]="Staked"})
+testmsg: Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="asdfg", Quantity = "10000000000", Recipient="l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ", ["X-Action"]="Staked"})

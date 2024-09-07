@@ -1,4 +1,4 @@
--- 8gcUYtSBI8iqQiq_YnIzPT_svY-hwEL3_gTWz0ps--I
+-- l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ
 -- local utils = require(".utils")
 local json = require("json")
 -- local constants = require("helpers.constants")
@@ -178,12 +178,17 @@ Handlers.add(
         -- Send alert if not right
         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
             -- traverse totals table, for each projectID
-
-                -- ao.send(
-                --     Target = projectID,
-                --     Action = Notif,
-                --     Quantity = TOTALS.projectID.AOQuantity,
-                -- )
+            local projectsTable = sql_run([[SELECT * FROM Projects]])
+            local aoQuantity
+            for _, i in projectsTable do
+               -- some formulae to calculate 
+               aoQuantity = i.TaoEthStaked/10
+                ao.send({
+                    Target = i.ProjectID,
+                    Action = "Notif",
+                    Quantity = tostring(aoQuantity),
+                })
+            end
                 -- log the info
                     -- TRANSACTIONS.amount= TOTALS.projectID.AOQuantity, 
                     -- TRANSACTIONS.userID= pid, 
