@@ -181,8 +181,8 @@ Handlers.add(
             local projectsTable = sql_run([[SELECT * FROM Projects]])
             local aoQuantity
             for _, i in projectsTable do
-               -- some formulae to calculate 
-               aoQuantity = i.TaoEthStaked/10
+                -- some formulae to calculate 
+                aoQuantity = i.TaoEthStaked/10
                 ao.send({
                     Target = i.ProjectID,
                     Action = "Notif",

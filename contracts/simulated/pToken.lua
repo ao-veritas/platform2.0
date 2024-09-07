@@ -1,4 +1,5 @@
--- hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4
+-- lrTtKXMhdmMSi8ZfTsdSX24Xpm9FAo47CRHe82HZ7XA
+local bint = require('.bint')(256)
 local ao = require('ao')
 
 local json = require('json')
@@ -36,8 +37,8 @@ Variant = "0.0.3"
 Denomination = Denomination or 12
 Balances = Balances or { [ao.id] = utils.toBalanceValue(10000 * 10 ^ Denomination) }
 TotalSupply = TotalSupply or utils.toBalanceValue(10000 * 10 ^ Denomination)
-Name = 'Test AO'
-Ticker = 'tAO'
+Name = 'Test Sat'
+Ticker = 'tSAT'
 Logo = Logo or 'SBCCXwwecBlDqRLUjb8dYABExTJXLieawf7m2aBJ-KY'
 
 --[[
