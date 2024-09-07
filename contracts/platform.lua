@@ -170,14 +170,15 @@ Handlers.add(
 -- AO RECIEVE
 Handlers.add(
     "AOReciever",
-    Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "AwpQ2zCfm0iyoUg5y-iYqldYsCnssrVzRcwBuKBamI4"),
+    Handlers.utils.hasMatchingTag("From-Process", "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4") and Handlers.utils.hasMatchingTag("Action", "Credit-Notice"),   
     function(msg)
-        -- local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
-        print("TEST")
+        local tags = msg.Tags
+        local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
         -- Send alert if not right
         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
             -- traverse totals table, for each projectID
+
                 -- ao.send(
                 --     Target = projectID,
                 --     Action = Notif,
