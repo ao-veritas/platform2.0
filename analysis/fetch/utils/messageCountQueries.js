@@ -45,7 +45,7 @@ async function fetchCount() {
 
     // console.log(`Total transactions count: ${totalCount}`);
 }
-fetchCount();
+// fetchCount();
 
 // export default fetchCount;
 
