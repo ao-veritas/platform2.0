@@ -9,8 +9,8 @@ db = db or sqlite3.open_memory()
 AOTOKENID = "abc"
     
 -- DROP TABLE IF EXISTS Transactions;
--- DROP TABLE IF EXISTS Projects;
 -- DROP TABLE IF EXISTS Users;
+-- DROP TABLE IF EXISTS Projects;
 db:exec([[
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,6 +72,28 @@ end
 -- NOTE: cant update totals, what if ao triggering notif, is last 5 min wala calculation and more has come since
 
 -- REGISTER USER (3rd party? lol no)
+Handlers.add(
+    "RegisterProject",
+    Handlers.utils.hasMatchingTag("Action", "Register-Project"),
+    function(msg)
+        print("enter Register project handler")
+        local tags = msg.Tags
+         -- CHECK USER TABLE, if not then add
+        local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], tags.projectID);
+        for _, i in ipairs(exists) do
+            print(i.value_exists);
+            if i.value_exists>0 then
+                Handlers.utils.reply("Project already Exists")(msg);
+                return;
+            else
+                local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], tags.projectID, tags.projectTokenID, 0)
+            end
+        end
+        -- if not Users[msg.From] then Users[msg.From] = "0" end
+        -- ADD OTHER INFO
+    end
+)
+
 Handlers.add(
     "RegisterUser",
     Handlers.utils.hasMatchingTag("Action", "Register-User"),
@@ -234,36 +256,63 @@ Handlers.add(
 --     end
 -- )
 
--- --PToken Recieved
--- Handlers.add(
---     "IncomingPToken",
---     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("From-Process", "ProjectToken"),
---     function(msg)
---         -- check against project tokens ID (frm project DB)
---             --iterate through PROJECTS TABLE
---                 -- if ptokenid exists, 
---                     -- iterate through usersStaked on the project
---                     -- distribute accordingly
---                         -- calculate quantity
---                         ao.send(
---                             Target = PROJECT.projectID.pTokenID,
---                             Action = "Transfer",
---                             Recipient = PROJECT.projectID.userID,
---                             Quantity = quantity
---                         )
---                     -- check totals and send ao to project
---                         -- calculate quantity
---                         ao.send(
---                             Target = AOTOKENID,
---                             Action = "Transfer",
---                             Recipient = ProjectID
---                             Quantity = quantity
---                         )
---                         -- TRANSACTION.status = fullfilled
---                 -- else end
---         -- Send to User (frm user db)
---     end
--- )
+--PToken Recieved
+Handlers.add(
+    "IncomingPToken",
+    function(msg)
+        print("ENTER RETURN FOR PTOKEN")
+        local fromProcess
+        for k,v in pairs(msg.Tags) do 
+            print("step1")
+            if k == "From-Process" then
+                print("step2")
+                fromProcess = v
+                break
+            end
+        end
+        print(fromProcess)
+        local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], fromProcess);
+        print("step3")
+        for _, i in ipairs(project_exists) do
+            print("step4")
+            print(i.value_exists);
+            if i.value_exists>0 and msg.Action == "Credit-Notice" then
+                print("step5.1")
+                -- Handlers.utils.reply("Proj already Exists")(msg);
+                return true
+            else
+                print("step5.2")
+                return false
+            end
+        end 
+    end,
+    function(msg)
+        print("ENTER PTOKEN RECIEVE")
+        -- -- check against project tokens ID (frm project DB)
+        --     --iterate through PROJECTS TABLE
+        --         -- if ptokenid exists, 
+        --             -- iterate through usersStaked on the project
+        --             -- distribute accordingly
+        --                 -- calculate quantity
+        --                 ao.send(
+        --                     Target = PROJECT.projectID.pTokenID,
+        --                     Action = "Transfer",
+        --                     Recipient = PROJECT.projectID.userID,
+        --                     Quantity = quantity
+        --                 )
+        --             -- check totals and send ao to project
+        --                 -- calculate quantity
+        --                 ao.send(
+        --                     Target = AOTOKENID,
+        --                     Action = "Transfer",
+        --                     Recipient = ProjectID
+        --                     Quantity = quantity
+        --                 )
+        --                 -- TRANSACTION.status = fullfilled
+        --         -- else end
+        -- -- Send to User (frm user db)
+    end
+)
 
 -- Handlers.add(
 --     "UnStake",
