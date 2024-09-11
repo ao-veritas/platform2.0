@@ -8,7 +8,7 @@ Handlers.add(
         local tags = msg.Tags
         local TotalPTokensQuantity = tags.Quantity
         -- print(typeof(TotalPTokensQuantity))
-        print(TotalPTokensQuantity)
+        print("total p tokens" .. TotalPTokensQuantity)
         print("notif enter")
             ao.send({
                 Target = PROJECTTOKENID,

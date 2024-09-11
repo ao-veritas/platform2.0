@@ -34,10 +34,10 @@ db:exec([[
 ]])
 
 function sql_run(query, ...)
-    print("enter sql run1")
+    print("enter sql run")
     local m = {}
     local stmt = db:prepare(query)
-    print(stmt);
+    print("run stmt:" .. tostring(stmt));
     if stmt then
         -- print("enter stmt1")
         local bind_res = stmt:bind_values(...)
@@ -54,9 +54,9 @@ end
 function sql_write(query, ...)
     print("enter sql write")
     local stmt = db:prepare(query)
-    print(stmt)
+    print("write stmt : " .. tostring(stmt))
     if stmt then
-        print("enter stmt2")
+        print("enter write stmt")
         local bind_res = stmt:bind_values(...)
         print(bind_res)
         assert(bind_res, "❌[bind error] " .. db:errmsg())
@@ -76,6 +76,7 @@ Handlers.add(
     "RegisterUser",
     Handlers.utils.hasMatchingTag("Action", "Register-User"),
     function(msg)
+        print("enter Register user handler")
         local tags = msg.Tags
          -- CHECK USER TABLE, if not then add
         local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.UserID);
@@ -99,7 +100,7 @@ Handlers.add(
     "Staked",
     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
     function(msg)
-        -- print("CREDIT NOTICE ENTERED STAKED")
+        print("CREDIT NOTICE ENTERED STAKED")
         local tags = msg.Tags 
         -- -- CHECK USER TABLE, if not then add or send notif to register (?)
         local user_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
@@ -166,31 +167,45 @@ Handlers.add(
     end
 )
 
+
+
 -- AO RECIEVE
 Handlers.add(
     "AOReciever",
-    Handlers.utils.hasMatchingTag("From-Process", "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4") and Handlers.utils.hasMatchingTag("Action", "Credit-Notice"),   
     function(msg)
+        local fromProcess
+        for k,v in pairs(msg.Tags) do 
+            if k == "From-Process" then
+                fromProcess = v
+            end
+        end
+        return msg.Action == "Credit-Notice" and  fromProcess == "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4"
+    end,
+    function(msg)
+        print("IN AO RECIEVER")
         local tags = msg.Tags
         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
+        print("AFTER TRANS CREATED")
         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
         -- Send alert if not right
         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
             -- traverse totals table, for each projectID
             local projectsTable = sql_run([[SELECT * FROM Projects]])
-            print(projectsTable)
-            local aoQuantity
+            -- -- print(projectsTable)
+            local aoQuantity =0
             for _, i in ipairs(projectsTable) do
                 -- some formulae to calculate 
                 print(i)
-                aoQuantity = i.TaoEthStaked
+                aoQuantity = aoQuantity + i.TaoEthStaked
                 print("tao:" .. i.TaoEthStaked)
-                print("aoQuantity:" .. tostring(aoQuantity))
+                print("new aoQuantity:" .. tostring(aoQuantity))
+                print("projectid" .. i.ProjectID)
                 ao.send({
                     Target = i.ProjectID,
                     Action = "Notif",
                     Quantity = tostring(aoQuantity),
                 })
+                print("NOTIF SENT")
             end
                 -- log the info
                     -- TRANSACTIONS.amount= TOTALS.projectID.AOQuantity, 

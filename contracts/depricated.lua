@@ -101,4 +101,8 @@ TEST PRINTS FOR STAKED TRANSACTION Logo
 
 user1: dE7vTrHgqAUK7h2zOVq_RxoRA8V5roKY9mPTD8blUlA
 user2: 6VFFgcNeclukALVW1EUujnuDClc3rdKGarJyEQZzsJA
-testmsg: Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="asdfg", Quantity = "10000000000", Recipient="l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ", ["X-Action"]="Staked"})
+UserToPlatformStake: Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="asdfg", Quantity = "10000000000", Recipient="l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ", ["X-Action"]="Staked"})
+sql_run([[SELECT * FROM Projects;]])
+sql_run([[SELECT * FROM Transactions;]])
+AoToPltform: Send({Target = ao.id, Action="Transfer", Quantity="1000000000", Recipient="l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ"})
+Send({Target = "D-SQxfti8Bl_TeJAAhhcsbuKH6H1PzZ-v_t1nalAdlI", Action = "Transfer", ["X-ProjectID"]="rXQaiyznUgDrt7A0Nzl9OQN2QBJ3we1X3qMe2W5DBXU", Quantity = "10000000000", Recipient="l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ", ["X-Action"]="Staked"})
