@@ -271,7 +271,7 @@ Handlers.add(
             end
         end
         print(fromProcess)
-        local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], fromProcess);
+        local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectTokenID = (?)) AS value_exists;]], fromProcess);
         print("step3")
         for _, i in ipairs(project_exists) do
             print("step4")
