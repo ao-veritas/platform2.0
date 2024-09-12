@@ -390,6 +390,67 @@ Handlers.add(
     end
 )
 
+Handlers.add(
+    "PtokenToUserDebit",
+    function(msg)
+        -- Check if the Action tag is 'Debit-Notice'
+        if msg.Action ~= "Debit-Notice" then
+            print("Action is not Debit-Notice")
+            return false
+        end
+    
+        local fromProcess = msg.From
+        local recipient = msg.Tags.Recipient
+    
+        -- Check if msg.From is a valid ProjectTokenID from the Projects table
+        local projectExists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectTokenID = ?) AS value_exists;]], fromProcess)
+        local projectValid = false
+        for _, result in ipairs(projectExists) do
+            if result.value_exists > 0 then
+                projectValid = true
+                break
+            end
+        end
+        if not projectValid then
+            print("Invalid project token")
+            return false
+        end
+    
+        -- Check if the recipient exists in the Users table
+        local userExists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = ?) AS value_exists;]], recipient)
+        local recipientValid = false
+        for _, result in ipairs(userExists) do
+            if result.value_exists > 0 then
+                recipientValid = true
+                break
+            end
+        end
+        if not recipientValid then
+            print("Invalid recipient user")
+            return false
+        end
+    
+        -- All validations passed
+        print("Validation successful")
+        return true
+    end,
+    function(msg)
+        print("entered debit notice")
+        local tags = msg.Tags
+        local projectIDQuery = sql_run([[SELECT ProjectID FROM Projects WHERE ProjectTokenID = ?]], msg.From)
+        local projectID
+        -- Check if a project was found
+        if #projectIDQuery > 0 then
+            -- Return the ProjectID (assuming the first result is what we need)
+            projectID = projectIDQuery[1].ProjectID
+        end
+        local logTrans = sql_write([[
+            INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        ]], tostring(msg.Timestamp), msg.Id, tags.Recipient, msg.From, tags.Quantity, projectID, "fulfilled", "ftu") 
+    end
+)
+
 
 -- Handlers.add(
 --     "UnStake",
