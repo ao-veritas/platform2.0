@@ -466,7 +466,7 @@ Handlers.add(
         end
 
         local currentProjectTotal = sql_run([[SELECT TaoEthStaked FROM Projects WHERE ProjectID = ?]], projectID)
-        if ccurrentProjectTotal[1].TaoEthStaked < unstakeQuantity then
+        if currentProjectTotal[1].TaoEthStaked < unstakeQuantity then
             Handlers.utils.reply("ERRORInsufficient staked tokens to unstake.")(msg) 
             return
         else
