@@ -47,6 +47,7 @@ function sql_run(query, ...)
     print("enter sql run")
     local m = {}
     local stmt = db:prepare(query)
+    -- print(query)
     -- print("run stmt:" .. tostring(stmt));
     if stmt then
         -- print("enter stmt1")
@@ -84,22 +85,22 @@ Handlers.add(
     "RegisterProject",
     Handlers.utils.hasMatchingTag("Action", "Register-Project"),
     function(msg)
-        print("enter Register project handler")
+        print("ENTER RegisterProject handler")
         local tags = msg.Tags
          -- CHECK USER TABLE, if not then add
+        print("Check if Exists Run")
         local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], tags.projectID);
         for _, i in ipairs(exists) do
-            print(i.value_exists);
+            -- print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("Project already Exists")(msg);
                 return;
             else
+                print("Add Project Write") 
                 local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], tags.projectID, tags.projectTokenID, 0)
             end
         end
-        -- if not Users[msg.From] then Users[msg.From] = "0" end
-        -- ADD OTHER INFO
-        print("exit Register project handler")
+        print("EXIT Register project handler")
     end
 )
 
@@ -108,21 +109,24 @@ Handlers.add(
     "RegisterUser",
     Handlers.utils.hasMatchingTag("Action", "Register-User"),
     function(msg)
-        print("enter Register user handler")
+        print("ENTER Register user handler")
         local tags = msg.Tags
          -- CHECK USER TABLE, if not then add
+         print("Check if User Exists Run")
         local exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.UserID);
         for _, i in ipairs(exists) do
-            print(i.value_exists);
+            -- print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("User already Exists")(msg);
                 return;
             else
+                print("Add User Write") 
                 local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
             end
         end
         -- if not Users[msg.From] then Users[msg.From] = "0" end
         -- ADD OTHER INFO
+        print("EXIT Register user handler")
     end
 )
 
@@ -131,16 +135,18 @@ Handlers.add(
     "Staked",
     Handlers.utils.hasMatchingTag("Action", "Credit-Notice") and Handlers.utils.hasMatchingTag("X-Action", "Staked"),
     function(msg)
-        print("CREDIT NOTICE ENTERED STAKED")
+        print("ENTER STAKED")
         local tags = msg.Tags 
         -- -- CHECK USER TABLE, if not then add or send notif to register (?)
+        print("Check if User Exists Run")
         local user_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], tags.Sender);
         for _, i in ipairs(user_exists) do
-            print(i.value_exists);
+            -- print(i.value_exists);
             if i.value_exists>0 then
                 Handlers.utils.reply("User already Exists")(msg);
                 break;
              else
+                print("Add User Write") 
                 local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.Sender)
             end
         end
@@ -173,13 +179,15 @@ Handlers.add(
             if k == "X-ProjectID" then
                 projectID = v
                 -- check if project exists, add if not
+                print("Check if Project Exists Run") 
                     local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectID = (?)) AS value_exists;]], projectID);
                     for _, i in ipairs(project_exists) do
-                        print(i.value_exists);
+                        -- print(i.value_exists);
                         if i.value_exists>0 then
                             -- Handlers.utils.reply("Proj already Exists")(msg);
                             break;
                          else
+                            print("Add Project Write") 
                             local write_res = sql_write([[INSERT INTO Projects (ProjectID, ProjectTokenID, TaoEthStaked) VALUES (?, ?, ?)]], projectID, "nil", 0)
                         end
                     end
@@ -205,6 +213,7 @@ Handlers.add(
         -- print("new total: " .. newTotal);
         local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
         -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
+        print("EXIT STAKED")
     end
 )
 
@@ -221,10 +230,10 @@ Handlers.add(
         return msg.Action == "Credit-Notice" and  fromProcess == "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4"
     end,
     function(msg)
-        print("IN AO RECIEVER")
+        print("ENTER AO RECIEVER")
         local tags = msg.Tags
+        print("Trasaction add write")
         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, "nil", "fulfilled", "atf")
-        print("AFTER TRANS CREATED")
         -- check against bridged tokens and yield, totaled from BRIDGED TOKENS DB
         -- Send alert if not right
         -- Send Notif According to Projects DB calc yield, Action = Notif, Amount = calc below
@@ -234,11 +243,11 @@ Handlers.add(
             local ptokenToSendQuantity =0
             for _, i in ipairs(projectsTable) do
                 -- some formulae to calculate 
-                print(i)
+                -- print(i)
                 ptokenToSendQuantity = ptokenToSendQuantity + i.TaoEthStaked --CALCULATE FORMULA (?)
-                print("tao:" .. i.TaoEthStaked)
-                print("new ptoken to send:" .. tostring(ptokenToSendQuantity))
-                print("projectid" .. i.ProjectID)
+                -- print("tao:" .. i.TaoEthStaked)
+                -- print("new ptoken to send:" .. tostring(ptokenToSendQuantity))
+                -- print("projectid" .. i.ProjectID)
                 ao.send({
                     Target = i.ProjectID,
                     Action = "Notif",
@@ -246,72 +255,9 @@ Handlers.add(
                 })
                 print("NOTIF SENT")
             end
-                -- log the info
-                    -- TRANSACTIONS.amount= TOTALS.projectID.AOQuantity, 
-                    -- TRANSACTIONS.userID= pid, 
-                    -- TRANSACTIONS.tokenID = ptid, 
-                    -- TRANSACTIONS.projectID = pid
-                    -- TRANSACTION.type = ptf
-                    -- TRANSACTION.status = pending
+            print("EXIT AO RECIEVER")
     end
 )
-
---PToken Recieved
--- Handlers.add(
---     "IncomingPToken",
---     function(msg)
---         print("ENTER RETURN FOR PTOKEN")
---         local fromProcess
---         for k,v in pairs(msg.Tags) do 
---             print("step1")
---             if k == "From-Process" then
---                 print("step2")
---                 fromProcess = v
---                 break
---             end
---         end
---         print(fromProcess)
---         local project_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Projects WHERE ProjectTokenID = (?)) AS value_exists;]], fromProcess);
---         print("step3")
---         for _, i in ipairs(project_exists) do
---             print("step4")
---             print(i.value_exists);
---             if i.value_exists>0 and msg.Action == "Credit-Notice" then
---                 print("step5.1")
---                 -- Handlers.utils.reply("Proj already Exists")(msg);
---                 return true
---             else
---                 print("step5.2")
---                 return false
---             end
---         end 
---     end,
---     function(msg)
---         print("ENTER PTOKEN RECIEVE")
---         local tags = msg.Tags
---         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, tags.Sender, "fulfilled", "ptf")
---             -- iterate through usersStaked on the project
---             -- distribute accordingly
---                 -- calculate quantity
---             --     ao.send(
---             --         Target = PROJECT.projectID.pTokenID,
---             --         Action = "Transfer",
---             --         Recipient = PROJECT.projectID.userID,
---             --         Quantity = quantity
---             --     )
---             -- -- check totals and send ao to project
---             --     -- calculate quantity
---             --     ao.send(
---             --         Target = AOTOKENID,
---             --         Action = "Transfer",
---             --         Recipient = ProjectID
---             --         Quantity = quantity
---             --     )
---                 -- TRANSACTION.status = fullfilled
---         -- else end
---         -- Send to User (frm user db)
---     end
--- )
 
 --PToken Received Handler
 Handlers.add(
@@ -343,31 +289,33 @@ Handlers.add(
         local fromProcess = tags["From-Process"]
 
         -- Log the incoming transaction
+        print("log trans write")
         local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], 
                                     tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, tags.Sender, "fulfilled", "ptf")
 
         -- Get the list of users who have staked in the project
+        print("find stakers run")
         local stakers = sql_run([[SELECT UserID, TotalStaked FROM UserStakes WHERE ProjectID = (?)]], tags.Sender)
-        print(stakers)
+        -- print(stakers)
         -- Distribute the incoming tokens based on user stakes
         local totalStake = 0
-        print("before mapping stakers")
+        -- print("before mapping stakers")
         for _, stake in ipairs(stakers) do
-            print("in stakes calc total")
+            -- print("in stakes calc total")
             totalStake = totalStake + tonumber(stake.TotalStaked)
-            print("total: ".. tostring(totalStake))
-            print("stake,total: " .. tostring(stake.TotalStaked))
+            -- print("total: ".. tostring(totalStake))
+            -- print("stake,total: " .. tostring(stake.TotalStaked))
         end
-        print("after mapping stakers")
+        -- print("after mapping stakers")
 
         if totalStake > 0 then
-            print("in total >0 stakers")
+            -- print("in total >0 stakers")
             for _, stake in ipairs(stakers) do
-                print("in total >0 stakers ka for loop")
+                -- print("in total >0 stakers ka for loop")
                 local userShare = math.floor((tonumber(stake.TotalStaked) / totalStake) * tonumber(tags.Quantity))
-                print("for user:" .. stake.UserID)
-                print("userShare:" .. tostring(userShare))
+                -- print("for user:" .. stake.UserID)
+                -- print("userShare:" .. tostring(userShare))
                 -- Send tokens to each staker
                 ao.send({
                     Target = msg.From,
@@ -376,20 +324,21 @@ Handlers.add(
                     Quantity = tostring(userShare),
                     ["X-Data"] = "stake distribution"
                 })
-                print("AFTER sta to user transfer sent")
+                -- print("AFTER sta to user transfer sent")
                 -- Optionally log the stake distribution as a transaction
                 -- local logDistTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
                 --                                 VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], 
                 --                                 tostring(msg.Timestamp), msg.Id, stake.UserID, msg.From, tostring(userShare), tags.Sender, "fulfilled", "ptf-distribution")
             end
-            print("after total >0 stakers ka for loop")
+            -- print("after total >0 stakers ka for loop")
  
         end
 
-        print("PTOKEN RECEIVE HANDLER COMPLETED")
+        print("EXIT PTOKEN RECEIVE HANDLER")
     end
 )
 
+-- PToken debit
 Handlers.add(
     "PtokenToUserDebit",
     function(msg)
@@ -451,27 +400,6 @@ Handlers.add(
     end
 )
 
-
--- Handlers.add(
---     "UnStake",
---     Handlers.utils.hasMatchingTag("Action", "Un-Stake"),
---     function(msg)
---         -- check against existing users
---         if not Users[msg.From] then
-        
---         else
---         -- Send back Bridged token from FE
---             ao.send(
---                 Target = msg.Tags.bridgedID,
---                 Action = "Transfer",
---                 Recipient = msg.From,
---                 Quantity = msg.Tags.Quantity,
---                 ["X-Action"] = "Unstaking"
---             )
---         end
---     end
--- )
-
 -- Handlers.add(
 --     "UnStaked",
 --     Handlers.utils.hasMatchingTag("Action", "Debit-Notice") and Handlers.utils.hasMatchingTag("x-Action", "Unstaking"),
@@ -504,3 +432,72 @@ Handlers.add(
 --     end
 -- )
 
+-- UNSTAKE BY USER
+Handlers.add(
+    "Unstaked",
+    Handlers.utils.hasMatchingTag("Action", "Unstaked"),
+    function(msg)
+        print("UNSTAKE REQUEST RECEIVED")
+        local tags = msg.Tags 
+        local projectID = tags.ProjectID
+        local tokenID = tags.TokenID
+        local unstakeQuantity = tonumber(tags.Quantity)
+        
+        -- Step 1: Validate user existence
+        local user_exists = sql_run([[SELECT EXISTS (SELECT 1 FROM Users WHERE UserID = (?)) AS value_exists;]], msg.From)
+        if user_exists[1].value_exists == 0 then
+            Handlers.utils.reply("User does not exist, please register first.")(msg)
+            return
+        end
+        
+        -- Step 2: Check if the user has enough staked tokens
+        local stakedTokens = sql_run([[SELECT TotalStaked FROM UserStakes WHERE UserID = ? AND ProjectID = ? AND TokenID = ?]], msg.From, projectID, tokenID)
+        print(stakedTokens)
+        if #stakedTokens == 0 then
+            Handlers.utils.reply("No staked tokens found for this project and token.")(msg)
+            return
+        end
+
+        local currentStake = tonumber(stakedTokens[1].TotalStaked)
+        
+        if currentStake < unstakeQuantity then
+            Handlers.utils.reply("Insufficient staked tokens to unstake.")(msg)
+            return
+        end
+
+        local currentProjectTotal = sql_run([[SELECT TaoEthStaked FROM Projects WHERE ProjectID = ?]], projectID)
+        if ccurrentProjectTotal[1].TaoEthStaked < unstakeQuantity then
+            Handlers.utils.reply("ERRORInsufficient staked tokens to unstake.")(msg) 
+            return
+        else
+            local projectTotal = tonumber(currentProjectTotal[1].TaoEthStaked)
+            local newProjectTotal = projectTotal - unstakeQuantity
+            sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ?]], tostring(newProjectTotal), projectID)
+        end
+        
+        -- Step 3: Update user's stake balance
+        local newTotal = currentStake - unstakeQuantity
+        if newTotal == 0 then
+            sql_write([[DELETE FROM UserStakes WHERE UserID = ? AND ProjectID = ? AND TokenID = ?]], msg.From, projectID, tokenID)
+        else
+            sql_write([[UPDATE UserStakes SET TotalStaked = ? WHERE UserID = ? AND ProjectID = ? AND TokenID = ?]], tostring(newTotal), msg.From, projectID, tokenID)
+        end
+        
+        -- Step 4: Log the unstake transaction
+        -- local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
+        --                             VALUES (?, ?, ?, ?, ?, ?, ?, ?);]], 
+        --                             tostring(msg.Timestamp), msg.Id, tags.Sender, tokenID, tostring(unstakeQuantity), projectID, "fulfilled", "unstake")
+        
+        -- Step 5: Initiate token transfer back to the user
+        ao.send({
+            Target = tokenID,
+            Action = "Transfer",
+            Recipient = msg.From,
+            Quantity = tostring(unstakeQuantity),
+            ["X-Data"] = "Unstake refund"
+        })
+        
+        Handlers.utils.reply("Unstake successful, tokens returned.")(msg)
+        print("UNSTAKE COMPLETED")
+    end
+)
