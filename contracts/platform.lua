@@ -14,7 +14,6 @@ AOTOKENID = "abc"
 -- DROP TABLE IF EXISTS UserStakes;
 
 db:exec([[
-
     CREATE TABLE IF NOT EXISTS Users(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         UserID TEXT NOT NULL
@@ -294,6 +293,14 @@ Handlers.add(
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], 
                                     tostring(msg.Timestamp), msg.Id, tags.Sender, msg.From, tags.Quantity, tags.Sender, "fulfilled", "ptf")
 
+        -- Send AO to project
+        ao.send({
+            Target = "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4",
+            Action = "Transfer",
+            Recipient = tags.Sender,
+            Quantity = tags.Quantity,
+            ["X-Action"] = "AOToProject" 
+        })
         -- Get the list of users who have staked in the project
         print("find stakers run")
         local stakers = sql_run([[SELECT UserID, TotalStaked FROM UserStakes WHERE ProjectID = (?)]], tags.Sender)
@@ -400,38 +407,6 @@ Handlers.add(
     end
 )
 
--- Handlers.add(
---     "UnStaked",
---     Handlers.utils.hasMatchingTag("Action", "Debit-Notice") and Handlers.utils.hasMatchingTag("x-Action", "Unstaking"),
---     function(msg)
---         -- check against bridged token IDs
---         if not Bridged[msg.From] then
---             ao.send(
---                 Target = msg.Sender,
---                 Data = "Not a verified Token"
---             )
---             -- SHALL WE BE SENDING SECURITY IMPLEMENTATIONS (?)
---             ao.send(
---                 Target = msg.From,
---                 Action = "Transfer",
---                 Recipient = msg.Sender,
---                 Quantity = msg.Quantity
---             )
---         else
---             -- log the info
---                 -- TRANSACTIONS.amount= msg.Quantity, 
---                 -- TRANSACTIONS.userID= msg.Sender, 
---                 -- TRANSACTIONS.bridgedID = msg.From, 
---                 -- TRANSACTIONS.projectID = msg.["X-projectID"]
---                 -- TRANSACTION.type = credit
---                 -- store to project = X-ProjectID (?)
---             -- ADD TO TOTALS
---                 -- agar we doing projectID
---                     -- TOTALS.projectID.bridgedID.Quantity
---         end
---     end
--- )
-
 -- UNSTAKE BY USER
 Handlers.add(
     "Unstaked",
@@ -483,21 +458,51 @@ Handlers.add(
             sql_write([[UPDATE UserStakes SET TotalStaked = ? WHERE UserID = ? AND ProjectID = ? AND TokenID = ?]], tostring(newTotal), msg.From, projectID, tokenID)
         end
         
-        -- Step 4: Log the unstake transaction
-        -- local logTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
-        --                             VALUES (?, ?, ?, ?, ?, ?, ?, ?);]], 
-        --                             tostring(msg.Timestamp), msg.Id, tags.Sender, tokenID, tostring(unstakeQuantity), projectID, "fulfilled", "unstake")
-        
+
         -- Step 5: Initiate token transfer back to the user
         ao.send({
             Target = tokenID,
             Action = "Transfer",
             Recipient = msg.From,
             Quantity = tostring(unstakeQuantity),
-            ["X-Data"] = "Unstake refund"
+            ["X-Data"] = "Unstake refund",
+            ["X-ProjectID"] = projectID,
+            ["X-Action"] = "Unstaked" 
         })
         
         Handlers.utils.reply("Unstake successful, tokens returned.")(msg)
         print("UNSTAKE COMPLETED")
+    end
+)
+
+-- UNSTAKE BY USER DEBIT NOTICE
+Handlers.add(
+    "UnstakedDebit",
+    Handlers.utils.hasMatchingTag("X-Action", "Unstaked") and Handlers.utils.hasMatchingTag("Action", "Debit-Notice"),
+    function(msg)
+        print("works")
+        local tags = msg.Tags
+        local projectID
+        for k,v in pairs(msg.Tags) do 
+            if k == "X-ProjectID" then
+                projectID = v
+            end
+        end
+        local logTrans = sql_write([[
+            INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        ]], tostring(msg.Timestamp), msg.Id, tags.Recipient, msg.From, tags.Quantity, projectID, "fulfilled", "utf") 
+    end
+)
+
+-- AO TO PROJECT DEBIT NOTICE
+Handlers.add(
+    "AOToProjectDebit",
+    Handlers.utils.hasMatchingTag("X-Action", "AOToProject") and Handlers.utils.hasMatchingTag("Action", "Debit-Notice"),
+    function(msg)
+        local logTrans = sql_write([[
+            INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        ]], tostring(msg.Timestamp), msg.Id, "nil", msg.From, tags.Quantity, tags.Recipient, "fulfilled", "utf")  
     end
 )
