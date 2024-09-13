@@ -123,8 +123,6 @@ Handlers.add(
                 local write_res = sql_write([[INSERT INTO Users (UserID) VALUES (?)]], tags.UserID)
             end
         end
-        -- if not Users[msg.From] then Users[msg.From] = "0" end
-        -- ADD OTHER INFO
         print("EXIT Register user handler")
     end
 )
@@ -211,7 +209,6 @@ Handlers.add(
         end
         -- print("new total: " .. newTotal);
         local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
-        -- TRIGGER NOTIF but from my process, NO CRON IT. (?)
         print("EXIT STAKED")
     end
 )
@@ -301,20 +298,18 @@ Handlers.add(
             Quantity = tags.Quantity,
             ["X-Action"] = "AOToProject" 
         })
+
         -- Get the list of users who have staked in the project
         print("find stakers run")
         local stakers = sql_run([[SELECT UserID, TotalStaked FROM UserStakes WHERE ProjectID = (?)]], tags.Sender)
-        -- print(stakers)
+
         -- Distribute the incoming tokens based on user stakes
         local totalStake = 0
-        -- print("before mapping stakers")
         for _, stake in ipairs(stakers) do
-            -- print("in stakes calc total")
             totalStake = totalStake + tonumber(stake.TotalStaked)
             -- print("total: ".. tostring(totalStake))
             -- print("stake,total: " .. tostring(stake.TotalStaked))
         end
-        -- print("after mapping stakers")
 
         if totalStake > 0 then
             -- print("in total >0 stakers")
@@ -331,14 +326,7 @@ Handlers.add(
                     Quantity = tostring(userShare),
                     ["X-Data"] = "stake distribution"
                 })
-                -- print("AFTER sta to user transfer sent")
-                -- Optionally log the stake distribution as a transaction
-                -- local logDistTrans = sql_write([[INSERT INTO Transactions (Timestamp, TransID, UserID, TokenID, Quantity, ProjectID, Status, Type) 
-                --                                 VALUES (?, ?, ?, ?, ?, ?, ?, ? );]], 
-                --                                 tostring(msg.Timestamp), msg.Id, stake.UserID, msg.From, tostring(userShare), tags.Sender, "fulfilled", "ptf-distribution")
-            end
-            -- print("after total >0 stakers ka for loop")
- 
+            end 
         end
 
         print("EXIT PTOKEN RECEIVE HANDLER")
