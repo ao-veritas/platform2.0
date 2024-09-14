@@ -7,7 +7,7 @@ const Saturn = () => {
   return (
     <>
     <Navbar/>
-    <main className={` ${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC]`}>
+    <main className={` ${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC] font-raleway`}>
         <section className="">
             <img src={project.bannerLink} alt="" className="rounded-md max-h-[300px]"/>
             <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-md w-fit`}>
@@ -24,7 +24,7 @@ const Saturn = () => {
             </div>
             <button className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-md px-[24px] py-[6px] text-[18px] font-medium`}>Stake Now</button>
         </section>
-        <section className="flex flex-row gap-3 w-full">
+        <section className="flex flex-row gap-3 w-full mb-[12px]">
             <section className="w-full flex flex-col gap-6 rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
                 <div className="flex flex-col gap-[3px]">
                 <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Project Info</h3>
@@ -64,24 +64,24 @@ const Saturn = () => {
                 </div>
             </section>
         </section>
-        <section>
-            <h2>Team</h2>
+        <section className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+            <h2 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Team</h2>
+            <div className="flex flex-row items-center justify-between">
             {project.team.map((member) => {
-                return <div>
-                <img src={member.imgLink} alt="" />
+                return <div className="flex flex-row gap-3">
+                <img src={member.imgLink} alt="" className="rounded-full max-w-[90px] max-h-[90px]"/>
                 <div>
-                    <h6>{member.officialName} {"("}{member.pseudoName}{")"}</h6>
+                    <h6>{member.officialName} {member.pseudoName?<span>{"("}{member.pseudoName}{")"}</span>:""}</h6>
                     <h6>{member.role}</h6>
-                    <div>
-                        {member.links.github?<a href={member.links.github}><img src="/icons/github.svg" alt="" /></a>:""}
-                        {member.links.twitter?<a href={member.links.twitter}><img src="/icons/twitter.svg" alt="" /></a>:""}
-                        {member.links.dribble?<a href={member.links.dribble}><img src="/icons/dribble.svg" alt="" /></a>:""}
-                        
+                    <div className="flex flex-row gap-[6px]">
+                        {member.links.github?<a href={member.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg"  className="w-[27px] h-[27px]" alt="" /></a>:""}
+                        {member.links.twitter?<a href={member.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[27px] h-[27px]"  alt="" /></a>:""}
+                        {member.links.dribble?<a href={member.links.dribble} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/dribble.svg" className="w-[27px] h-[27px]"  alt="" /></a>:""}
                     </div>
                 </div>
             </div>
             })}
-            
+            </div>
         </section>
         <section>
             <div>

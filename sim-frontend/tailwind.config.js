@@ -5,7 +5,9 @@ export default {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {fontFamily: {
+      raleway: ['Raleway', 'sans-serif'],  // Add Raleway to the font family list
+    },},
   },
   plugins: [],
 }
