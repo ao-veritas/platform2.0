@@ -494,3 +494,23 @@ Handlers.add(
         ]], tostring(msg.Timestamp), msg.Id, "nil", msg.From, tags.Quantity, tags.Recipient, "fulfilled", "utf")  
     end
 )
+
+Handlers.add(
+    "InfoUserStakes",
+    Handlers.utils.hasMatchingTag("Action", "Info-UserStakes"),
+    function(msg)
+        local userStakes = sql_run([[SELECT * FROM UserStakes]]);
+        print(userStakes)
+        Handlers.utils.reply(json.encode(userStakes))(msg)
+    end
+)
+
+Handlers.add(
+    "InfoProjects",
+    Handlers.utils.hasMatchingTag("Action", "Info-Projects"),
+    function(msg)
+        local projects = sql_run([[SELECT * FROM Projects]]);
+        print(projects)
+        Handlers.utils.reply(json.encode(projects))(msg)
+    end
+)
