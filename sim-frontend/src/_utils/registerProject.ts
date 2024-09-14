@@ -26,7 +26,7 @@ const registerProject = async(project:ProjectDetails) => {
     return false
   } else {
     console.log(Messages)
-    console.log("WPRKS")
+    console.log("REGISTER WORKS")
     return true
   }
   return false
