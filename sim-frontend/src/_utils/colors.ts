@@ -1,0 +1,12 @@
+// const dark = "#111111";
+// const light = "#E3E7D3";
+// const secondary = "#40959D";
+export const brandDarkBg = "bg-[#161515]";
+export const brandLightBg = "bg-[#D9D9D9]";
+export const brandSecondaryBg = "bg-[#0E9C9C]";
+export const brandDarkText = "text-[#161515]";
+export const brandLightText = "text-[#D9D9D9]";
+export const brandSecondaryText = "text-[#0E9C9C]";
+export const brandDarkBorder = "border-[#161515]";
+export const brandLightBorder = "border-[#D9D9D9]";
+export const brandSecondaryBorder = "border-[#0E9C9C]";

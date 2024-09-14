@@ -1,7 +1,7 @@
 import { useConnection } from 'arweave-wallet-kit';
-import React, { useEffect, useState } from 'react'
-import Nav from '../_components/Nav';
+import { useEffect, useState } from 'react'
 import userStakes from '../_utils/info';
+import Navbar from '../_components/Layout/Navbar';
 
 type UserStakes = {
     UserID: string;
@@ -22,7 +22,7 @@ const User = () => {
     
     return (
     <main className="bg-[#212121] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6">
-              <Nav/>
+              <Navbar/>
               <button onClick={async()=>{
                 setUserData(await userStakes());
               }}>Get user</button>

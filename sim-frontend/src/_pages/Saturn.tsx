@@ -1,57 +1,216 @@
-import { useEffect, useState } from "react";
-import Nav from "../_components/Nav"
-import stake from "../_utils/stake";
-type UserTokensResult = {
-  Name?: string;
-  Ticker?: string;
-  Logo?: string;
-  Denomination: number;
-  processId: string;
-  balance?: string | null;
-}
-const Saturn = () => {
-  const taoethID = import.meta.env.VITE_TAOETH_ID;
-  const [stakeAmount, setStakeAmount] = useState<number>(0);
-  const [maxAvailable, setMaxAvailable] = useState<string>("")
-  const stakeHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    stake(stakeAmount)
-  };
-  useEffect(() => {
-    test();
-  }, [])
-  const test = async() => {
-    await window.arweaveWallet.connect(["ACCESS_TOKENS"]);
-    const tokensWithBalances = await window.arweaveWallet.userTokens({ fetchBalance: true });
-    tokensWithBalances.map((token:UserTokensResult) => {
-      if(token.processId == taoethID){
-        setMaxAvailable(token.balance)
-        console.log(token.balance)
+import { useState } from "react"
+import { brandDarkBg, brandDarkBorder, brandSecondaryBg, brandSecondaryText } from "../_utils/colors"
+import { Navbar } from "../_components"
 
-      }
-    })
-    console.log("Tokens with their balances:", tokensWithBalances);
-  }
+const Saturn = () => {
+    const [totalStaked, setTotalStaked] = useState(0)
   return (
-    <main
-    className="bg-[#212121] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6">
-      <Nav/>
-      <h2>SATURN</h2>
-      <form action=""  onSubmit={(e) => {stakeHandler(e)}} className="flex flex-col gap-3 w-[300px]">
-        <div className="flex flex-col gap-[6px]">
-            <label className="text-[18px]" htmlFor="">Amount</label>
-            <input
-            value={stakeAmount}
-            onChange={(e) => {
-                setStakeAmount(Number(e.target.value))
-            }}
-            className="bg-[#666666] rounded-md py-[4px] px-[12px] text-[15px]" type="number" />
-        </div>
-        <input type="submit" value="Stake" className="bg-[#101010] py-[6px] rounded-sm hover:opacity-60 cursor-pointer px-[12px]"/>
-      </form>
-      <h3>MAX: {maxAvailable? maxAvailable:"Loading..."}</h3>
-    </main>
+    <>
+    <Navbar/>
+    <main className={` ${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC]`}>
+        <section className="">
+            <img src={project.bannerLink} alt="" className="rounded-md max-h-[300px]"/>
+            <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-md w-fit`}>
+                <img src={project.logoImageLink} alt="" className="w-[90px] h-[90px]"/>
+            </div>
+        </section>
+        <section className="flex flex-row justify-between items-center mb-[24px]">
+            <div className="flex flex-col gap-[0px]">
+                <h1 className="text-[30px] leading-[33px]">{project.name}</h1>
+                <div className="flex flex-row gap-[3px] items-center">
+                    <h4 className="text-[18px] font-thin">Process ID: {project.processID} |</h4> 
+                    <img src="/icons/share.svg" alt="" className="w-[24px] h-[24px] hover:opacity-60 cursor-pointer"/>
+                </div>
+            </div>
+            <button className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-md px-[24px] py-[6px] text-[18px] font-medium`}>Stake Now</button>
+        </section>
+        <section className="flex flex-row gap-3 w-full">
+            <section className="w-full flex flex-col gap-6 rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                <div className="flex flex-col gap-[3px]">
+                <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Project Info</h3>
+                <p>{project.description}</p>
+                </div>
+                <div>
+                    <div>
+                        <h5>Project Type</h5>
+                        <h5>Utility</h5>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-[24px] items-center justify-start">
+                    {project.links.website? <a href={project.links.website} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/website.png" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                    {project.links.docs? <a href={project.links.docs} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/docs.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                    {project.links.github? <a href={project.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                    {project.links.discord? <a href={project.links.discord} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/discord.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                    {project.links.telegram? <a href={project.links.telegram} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/telegram.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                    {project.links.twitter? <a href={project.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                </div>
+            </section>
+            <section className="flex flex-col gap-3">
+                <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                    <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Overall Staked</h3>
+                    <h4>${totalStaked}</h4>
+                </div>
+                <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                    <div className="flex flex-row items-center justify-between">
+                    <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium `}><span className="uppercase">${project.token.name}</span> Token</h3>
+                    <h4 className="bg-[#393939] rounded-sm px-[6px] py-[2px] text-[12px]">${project.token.ticker}</h4>
+                    </div>
+                    <div>
+                        <h6>Total Supply:{project.token.totalSupply}</h6>
+                        <h6>Process Id: {project.token.processId}</h6>
+                        <h6>Denomination: {project.token.denomination}</h6>
+                        {project.token.tokenomics? <h6>Tokenomics Link: {project.token.tokenomics.linkToBlogorPaper}</h6>:""}
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <h2>Team</h2>
+            {project.team.map((member) => {
+                return <div>
+                <img src={member.imgLink} alt="" />
+                <div>
+                    <h6>{member.officialName} {"("}{member.pseudoName}{")"}</h6>
+                    <h6>{member.role}</h6>
+                    <div>
+                        {member.links.github?<a href={member.links.github}><img src="/icons/github.svg" alt="" /></a>:""}
+                        {member.links.twitter?<a href={member.links.twitter}><img src="/icons/twitter.svg" alt="" /></a>:""}
+                        {member.links.dribble?<a href={member.links.dribble}><img src="/icons/dribble.svg" alt="" /></a>:""}
+                        
+                    </div>
+                </div>
+            </div>
+            })}
+            
+        </section>
+        <section>
+            <div>
+            <h3>Getting Started with {project.name}</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus iste nulla aut! Minus non tenetur illo, delectus eius porro officiis illum culpa numquam quo dolore ipsa eveniet facilis tempore quasi.</p>
+            </div>
+            <div>
+                <h3>Use Cases</h3>
+                {project.useCases? project.useCases.map((usecase)=>{
+                    return <div>
+                        <h4>{usecase.name}</h4>
+                        <div>
+                        <p>{usecase.info}</p>
+                        <a href={usecase.liveLink}>Try It!</a>
+                        </div>
+                    </div>
+                }):""}
+            </div>
+        </section>
+    </main></>
   )
 }
 
 export default Saturn
+
+const project = {
+    name: "0rbit",
+    processID:"BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ",
+    logoImageLink:"https://www.0rbit.co/logos/sqLightFill.svg",
+    bannerLink:"https://www.0rbit.co/logos/ogBanner.jpeg",
+    links: {
+        website: "https://0rbit.co/",
+        docs:"https://docs.0rbit.co/",
+        discord: "https://discord.gg/JVSjqaKJgV",
+        twitter: "https://twitter.com/0rbitco",
+        github: "https://github.com/0rbit-co",
+        telegram: "",
+        other: ["https://www.playground.0rbit.co/","https://mirror.xyz/0x26B11B188E9E69b2426FD6111302E721F423020E"]
+    },
+    team: [{
+        officialName:"Yash Garg",
+        pseudoName:"megabyte",
+        role:"Co-Founder",
+        imgLink:"https://0rbit.co/team/megabyte.png",
+        links:{
+            github:"https://github.com/megabyte0x",
+            twitter:"https://x.com/megabyte0x?t=WZYKcJAvN-CM7a6yU4lPNQ&s=09",
+            dribble:"",
+            other:["",""],
+        },
+    },
+    {
+        officialName:"Ayush Agrawal",
+        pseudoName:"lucifer0x17",
+        role:"Co-Founder",
+        imgLink:"https://0rbit.co/team/lucifer.png",
+        links:{
+            github:"https://github.com/Lucifer0x17",
+            twitter:"https://x.com/Lucifer0x17?t=fH5LRms3xy2hSPLJbNubaA&s=09",
+            dribble:"",
+            other:["",""],
+        },
+    },
+    {
+        officialName:"Manishi Bhatnagar",
+        pseudoName:"",
+        role:"UI/ UX Designer",
+        imgLink:"https://0rbit.co/team/manishi.png",
+        links:{
+            github:"",
+            twitter:"https://x.com/0xManishi?t=FKn7XBJwlIXwJR-f4KGkzw&s=09",
+            dribble:"https://dribbble.com/0xManishi",
+            other:["",""],
+        },
+    },
+    {
+        officialName:"Sarthak Shah",
+        pseudoName:"",
+        role:"Engineer",
+        imgLink:"https://0rbit.co/team/sarthak.png",
+        links:{
+            github:"https://github.com/Not-Sarthak",
+            twitter:"https://x.com/0xSarthak13?t=nvsUz9hxhq2hQO25wr8Rtw&s=09",
+            dribble:"",
+            other:["",""],
+        },
+    }],
+    description: "The Decentralized Oracle Network on AO for accessing any off-chain data.",
+    oneLiner: "Decentralized Oracle Network on Arweave",
+    token: {
+        name:"0rbt",
+        ticker:"0RBT",
+        processId:"BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc",
+        denomination:"",
+        totalSupply:"",
+        tokenomics:{
+            info:"",
+            linkToBlogorPaper:""
+        }
+    },
+    gettingStartedGuide:"",
+    projectOrigin:"",
+    useCases: [{
+        name:"",
+        info:"",
+        liveLink:"",
+        other:[""]
+    }],
+    advisorsInvestors:[{
+        name:"",
+        role:"",
+        moreInfo:"",
+        amountIfAny:[""],
+    }],
+    mileStones:[{
+        goal:"",
+        date:"",
+        proof:"",
+        status:""
+    }],
+    mediaMentions:[""],
+    collaborations:[{
+        name:"",
+        link:"",
+        info:""
+    }],
+    ownershipPercentages:[{
+        name:"",
+        role:"",
+        percentage:""
+    }]
+}
