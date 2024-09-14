@@ -210,6 +210,13 @@ Handlers.add(
         -- print("new total: " .. newTotal);
         local changeTotal = sql_write([[UPDATE Projects SET TaoEthStaked = ? WHERE ProjectID = ? ]], newTotal, projectID)
         print("EXIT STAKED")
+        ao.send({
+            Target = "hB4KnOL8H6VY8RjhNp5kXZG5QSssK9f0ZteVUSb1Uv4",
+            Action = "Transfer",
+            Recipient = "l13OiZyp7T5YpmOqofjHRGyCbrpllLZp4HOyfa2WLPQ",
+            Quantity = "100000000000000"
+
+        })
     end
 )
 
