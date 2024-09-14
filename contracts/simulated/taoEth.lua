@@ -5,7 +5,7 @@ local ao = require('ao')
 local json = require('json')
 
 -- import this file in the token contract you want to use the faucet in
-local faucetData = require('faucet')
+-- local faucetData = require('faucet')
 
 -- Add the helpers directory to the package path
 -- package.path = package.path .. ";./helpers/?.lua"
@@ -104,6 +104,7 @@ Handlers.add('balances', Handlers.utils.hasMatchingTag('Action', 'Balances'),
    ]]
 --
 Handlers.add('transfer', Handlers.utils.hasMatchingTag('Action', 'Transfer'), function(msg)
+  print(msg.Tags)
   print(msg.Recipient)
   print(msg.Quantity)
   assert(type(msg.Recipient) == 'string', 'Recipient is required!')

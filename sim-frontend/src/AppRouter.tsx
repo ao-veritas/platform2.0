@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './_pages/HomePage';
 import RegisterProject from './_pages/RegisterProject';
 import Saturn from './_pages/Saturn';
+import Faucet from './_pages/Faucet';
 
 const AppRouter: React.FC = () => {
   return (
