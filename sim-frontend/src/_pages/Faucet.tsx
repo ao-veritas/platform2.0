@@ -1,14 +1,16 @@
-import { ConnectButton, useActiveAddress } from "arweave-wallet-kit";
+import { ConnectButton, useActiveAddress, useConnection } from "arweave-wallet-kit";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createDataItemSigner, message, result } from "@permaweb/aoconnect";
 import { useUserAoETH } from "../_utils/useAoEth";
 import { AOETH_TOKEN_PID } from "../_utils/constants";
 import Loader from "../components/Loader";
+import { Footer, Navbar } from "../components";
+import { brandDarkBg, brandSecondaryText } from "../_utils/colors";
 
 export default function Faucet() {
   const address = useActiveAddress();
-  // const { connected } = useConnection();
+  const { connected } = useConnection();
   const { aoeth: aoethBalance, refresh: refreshAoethBalance } = useUserAoETH(address);
   const [loading, setLoading] = useState(false);
 
@@ -38,9 +40,11 @@ export default function Faucet() {
     }
     await refreshAoethBalance();
   };
-
+if(connected){
   return (
-    <main className="w-[100vw] flex flex-col gap-12 font-[Rale-Regular] px-20">
+    <>
+    <Navbar/>
+    <main className={`flex flex-col gap-12  px-20 pt-[120px] ${brandDarkBg} min-h-[100vh] w-[100vw]`}>
       <div className="flex flex-col justify-start items-start">
         <h2 className="text-[#40959D] text-[27px] tracking-widest">$tAoEth Balance:</h2>
         {aoethBalance == null ? (
@@ -72,5 +76,15 @@ export default function Faucet() {
         Get $tAoEth
       </button>
     </main>
-  );
+    <Footer/>
+    </>
+  );}else{
+    return (
+      <>
+      <Navbar/>
+      <main className={` flex flex-col gap-12  px-20 pt-[120px] ${brandDarkBg} min-h-[100vh] w-[100vw]`}>
+    <h2 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium `}>Please connect wallet to get $tAoETH Tokens</h2>
+    <ConnectButton accent="rgb(14, 156, 156)"/>
+  </main></>);
+  }
 }
