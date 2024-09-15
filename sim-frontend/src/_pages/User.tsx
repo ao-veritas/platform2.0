@@ -1,7 +1,9 @@
-import { useConnection } from 'arweave-wallet-kit';
+import { ConnectButton, useActiveAddress, useConnection } from 'arweave-wallet-kit';
 import { useEffect, useState } from 'react'
 import userStakes from '../_utils/info';
-import Navbar from '../_components/Layout/Navbar';
+import Navbar from '../components/Layout/Navbar';
+import { brandDarkBg } from '../_utils/colors';
+import { TaoEthBalance, TaoEthStaked } from '../components';
 
 type UserStakes = {
     UserID: string;
@@ -12,21 +14,26 @@ type UserStakes = {
 
 
 const User = () => {
+  const address = useActiveAddress();
     const { connected } = useConnection();  
-    const [userData, setUserData] = useState<UserStakes[]>([]);
-    useEffect(() => {
-      userData.map((user) => {
-        console.log(user)
-      })
-    }, [userData])
-    
+
+    if (!address)
+      return (
+        <div className="text-white flex justify-center items-start h-60">
+          <ConnectButton />
+        </div>
+      ); 
     return (
-    <main className="bg-[#212121] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6">
-              <Navbar/>
-              <button onClick={async()=>{
-                setUserData(await userStakes());
-              }}>Get user</button>
-    </main>
+      <>
+        <Navbar/>
+        <main className={`${brandDarkBg} min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6 pt-[120px]`}>
+           <TaoEthBalance/> 
+            {/* <button onClick={async()=>{
+              setUserData(await userStakes());
+            }}>Get user</button> */}
+            <TaoEthStaked/>
+        </main>
+    </>
   )
 }
 

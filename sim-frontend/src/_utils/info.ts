@@ -27,4 +27,15 @@ const userStakes = async() => {
       return userData;
 }
 
+export const getTaoEthStake = async() => {
+  const userStakesData = await userStakes();
+  let taoEthStaked = 0;
+  userStakesData.map((user) => {
+    taoEthStaked = taoEthStaked+ Number(user.TotalStaked)
+    console.log(user)
+    console.log(taoEthStaked)
+  })
+  return taoEthStaked
+}
+
 export default userStakes;
