@@ -1,11 +1,16 @@
-import Nav from '../_components/Nav'
+import { Arch, Companies, Hero, Navbar, ProjectsDisplay } from "../components"
 
 const HomePage = () => {
   return (
-    <main className="bg-[#212121] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6">
-      <h1 className=" font-bold text-[45px]">Simulated FE</h1>
-      HOME
-    </main>
+    <>
+      <Navbar/>
+      <main className={`pt-[120px] bg-[#111111] font-raleway min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6`}>
+        <Hero/>
+        <Arch/>
+        <ProjectsDisplay/>
+        <Companies/>
+      </main>
+    </>
   )
 }
 
