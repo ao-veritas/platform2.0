@@ -1,7 +1,7 @@
 
 const Hero = () => {
   return (
-    <section className="w-[100vw] text-[#eeeeee] flex flex-col justify-center items-center lg:px-20 px-6 pt-[15px] pb-[90px]">
+    <section className="w-full text-[#eeeeee] flex flex-col justify-center items-center lg:px-20 px-6 pt-[15px] pb-[90px]">
       <div className="relative flex flex-row justify-between items-center w-full">
         <div className="w-fit ltrAnim">
           <img

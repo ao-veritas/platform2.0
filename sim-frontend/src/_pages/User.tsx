@@ -1,14 +1,16 @@
-import { ConnectButton, useActiveAddress, useConnection } from 'arweave-wallet-kit';
+import { ConnectButton, useActiveAddress } from 'arweave-wallet-kit';
 import Navbar from '../components/Layout/Navbar';
 import { brandDarkBg } from '../_utils/colors';
 import { TaoEthBalance, TaoEthStaked } from '../components';
+import ProjectCard from '../components/Landing/ProjectCard';
+import { project } from './Saturn';
 
-type UserStakes = {
-    UserID: string;
-    TokenID: string;
-    TotalStaked: string;
-    ProjectID: string;
-  };
+// type UserStakes = {
+//     UserID: string;
+//     TokenID: string;
+//     TotalStaked: string;
+//     ProjectID: string;
+//   };
 
 
 const User = () => {
@@ -28,9 +30,18 @@ const User = () => {
     return (
       <>
         <Navbar/>
-        <main className={`${brandDarkBg} min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6 pt-[120px]`}>
-           <TaoEthBalance/> 
-            <TaoEthStaked/>
+        <main className={`${brandDarkBg} min-h-[100vh] w-full text-[#ffffff] flex flex-col justify-start items-center gap-6 pt-[120px]`}>
+          <div className='flex flex-col justify-start w-4/5 gap-20'>
+            <div className='flex gap-20 ml-20'>
+              <TaoEthBalance/> 
+              <TaoEthStaked/>
+            </div>
+            <div className='grid md:grid-cols-2 '>
+              <ProjectCard project={project}/>
+              <ProjectCard project={project}/>
+              <ProjectCard project={project}/>
+            </div>
+          </div>
         </main>
     </>
   )
