@@ -8,7 +8,6 @@ const HomePage = () => {
         <Hero/>
         <Arch/>
         <ProjectsDisplay/>
-
       </main>
       <Footer/>
     </>

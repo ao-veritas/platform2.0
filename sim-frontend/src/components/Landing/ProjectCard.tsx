@@ -1,13 +1,29 @@
 // import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { ProjectType } from "../../types/Project";
+import { ProjectType } from "../../_utils/types";
+import { useEffect, useState } from "react";
+import { getTaoEthStake, pTokenRecieved } from "../../_utils/info";
 
 export default function ProjectCard({ project }: { project: ProjectType }) {
-  //   const navigate = useNavigate();
+  const [taoEthStaked, setTaoEthStaked] = useState<number>(0);
+  const [pTokens, setPTokens] = useState<number>(0)
+  useEffect(() => {
+    callGetTaoStakes();
+    callPTokenRecieved();
+  }, [])
+  const callGetTaoStakes = async() => {
+    setTaoEthStaked(await getTaoEthStake());
+    console.log("in callGetTaoStakes")
+  }
+  const callPTokenRecieved = async() => {
+    setPTokens(await pTokenRecieved(project.token.processId));
+    console.log("in callPtokensrecieved")
+  }
 
   return (
     <Link
-      to={"/project/" + project?.token.ticker}
+      // to={"/project/" + project?.token.ticker}
+      to={"/saturn"}
       className="max-w-[390px] rounded-lg place-self-center
       flex flex-col gap-[6px] bg-zinc-900 justify-between items-center py-[15px] px-[21px] mb-10"
     >
@@ -30,11 +46,11 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
         <div className="flex flex-row gap-2">
           <div className="flex flex-col text-sm">
             <p className="font-[Raleway] text-[#40959D]">Amount Staked</p>
-            <p>{(project.amountStaked / 10 ** 12).toFixed(2)} $AoEth</p>
+            <p>{(taoEthStaked / 10 ** 12).toFixed(2)} $AoEth</p>
           </div>
           <div className="flex flex-col text-sm">
             <p className="font-[Raleway] text-[#40959D]">Token Recieved</p>
-            <p>500 $SAT</p>
+            <p>{(pTokens/ 10 ** 12).toFixed(2)} $SAT</p>
           </div>
         </div>
         <div className="flex flex-row gap-2 text-xs">
