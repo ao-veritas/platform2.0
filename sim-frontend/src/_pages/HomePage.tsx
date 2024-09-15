@@ -1,4 +1,4 @@
-import { Arch, Hero, Navbar, ProjectsDisplay } from "../components"
+import { Arch, Footer, Hero, Navbar, ProjectsDisplay } from "../components"
 
 const HomePage = () => {
   return (
@@ -10,6 +10,7 @@ const HomePage = () => {
         <ProjectsDisplay/>
 
       </main>
+      <Footer/>
     </>
   )
 }

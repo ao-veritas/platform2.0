@@ -14,6 +14,17 @@ type UserStakes = {
     ProjectID: string;
   }
 
+  type Transaction = {
+    Timestamp: string;
+    Type: string;
+    Status: string;
+    ProjectID: string;
+    UserID: string;
+    TokenID: string;
+    TransID: string;
+    Quantity: string;
+  };
+
 export const userStakes = async() => {
     const userAddress = await window.arweaveWallet.getActiveAddress();
     let { Error, Messages } = await dryrun({
@@ -72,4 +83,21 @@ export const getProjectStake = async(projectID:String) =>{
     }
   })
   return amount
+}
+
+
+export const getAllTransactions = async() => {
+  let { Error, Messages } = await dryrun({
+    process: platformID,
+    tags: [
+      { name: "Action", value: "Info-Transactions" },
+    ],
+  });
+  const tempTable = JSON.parse(Messages[0].Data)
+  const transactions:Transaction[] = []
+  tempTable.map((transaction:Transaction) => {
+        transactions.push(transaction)
+  })
+  console.log("other:", transactions)
+  return transactions; 
 }

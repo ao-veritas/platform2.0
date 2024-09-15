@@ -1,7 +1,7 @@
 import { ConnectButton, useActiveAddress, useConnection } from 'arweave-wallet-kit';
 import Navbar from '../components/Layout/Navbar';
 import { brandDarkBg } from '../_utils/colors';
-import { TaoEthBalance, TaoEthStaked } from '../components';
+import { Footer, TaoEthBalance, TaoEthStaked } from '../components';
 
 type UserStakes = {
     UserID: string;
@@ -23,6 +23,7 @@ const User = () => {
             <ConnectButton accent="rgb(14, 156, 156)"/> 
           </section>
         </main>
+        <Footer/>
     </>
       ); 
     return (
@@ -32,6 +33,7 @@ const User = () => {
            <TaoEthBalance/> 
             <TaoEthStaked/>
         </main>
+        <Footer/>
     </>
   )
 }
