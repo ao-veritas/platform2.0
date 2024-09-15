@@ -1,22 +1,20 @@
-import { useState } from "react"
-import registerProject from "../_utils/registerProject";
+import React, { useState } from 'react'
+import registerProject from '../../_utils/registerProject';
 
 type ProjectDetails = {
     projectID: string;
     projectTokenID: string;
   };
 
-const RegisterProject = () => {
+const OwnerForm = () => {
     const [projectDetails, setProjectDetails] = useState<ProjectDetails>({ projectID: '', projectTokenID: '' });
     const registerProjectHandler = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const success = await registerProject(projectDetails);
         if (success) {
-            // If registration is successful, reset the form and show success message
             setProjectDetails({ projectID: '', projectTokenID: '' });
             alert("Registration successful!");
           } else {
-            // Handle registration failure (optional)
             alert("Registration failed. Please try again.");
           }
     }
@@ -24,8 +22,7 @@ const RegisterProject = () => {
         return pid.length === 43 && tpid.length === 43;
       };
     console.log(validateInput(projectDetails.projectID, projectDetails.projectTokenID))
-
-    return (
+  return (
     <form
     onSubmit={(e) => {registerProjectHandler(e)}}
     className="flex flex-col gap-[12px] w-[390px]">
@@ -56,8 +53,8 @@ const RegisterProject = () => {
         <input
         disabled={!validateInput(projectDetails.projectID, projectDetails.projectTokenID)}
         className={`bg-[#101010] py-[6px] rounded-sm ${!validateInput(projectDetails.projectID, projectDetails.projectTokenID) ? "opacity-50 cursor-not-allowed" : "hover:opacity-60 cursor-pointer"}`} type="submit" value="Register Project" />
-    </form>
+    </form> 
   )
 }
 
-export default RegisterProject
+export default OwnerForm

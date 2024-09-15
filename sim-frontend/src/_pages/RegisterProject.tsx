@@ -1,64 +1,33 @@
-import { useState } from "react"
-import registerProject from "../_utils/registerProject";
-import Nav from "../_components/Nav";
-
-type ProjectDetails = {
-    projectID: string;
-    projectTokenID: string;
-  };
+import { useEffect, useState } from "react"
+import { useConnection } from "arweave-wallet-kit";
+import { brandDarkBg } from "../_utils/colors";
+import { Navbar, OwnerForm, RegisterProjectForm } from "../components";
 
 const RegisterProject = () => {
-    const [projectDetails, setProjectDetails] = useState<ProjectDetails>({ projectID: '', projectTokenID: '' });
-    const registerProjectHandler = async(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const success = await registerProject(projectDetails);
-        if (success) {
-            setProjectDetails({ projectID: '', projectTokenID: '' });
-            alert("Registration successful!");
-          } else {
-            alert("Registration failed. Please try again.");
-          }
+  const ownerAddress = import.meta.env.VITE_OWNER_ADDRESS;
+  const [currentAddress, setCurrentAddress] = useState("");
+  const {connected} = useConnection();
+    useEffect(() => {
+      getAddress();
+    }, [])
+    const getAddress = async() => {
+      const userAddress = await window.arweaveWallet.getActiveAddress();
+      setCurrentAddress(userAddress);
     }
-    const validateInput = (pid: string, tpid: string): boolean => {
-        return pid.length === 43 && tpid.length === 43;
-      };
-    console.log(validateInput(projectDetails.projectID, projectDetails.projectTokenID))
-
     return (
-      <main className="bg-[#212121] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6">
-      <Nav/>
-        <form
-        onSubmit={(e) => {registerProjectHandler(e)}}
-        className="flex flex-col gap-[12px] w-[390px]">
-            <div className="flex flex-col gap-[6px]">
-            <label className="text-[18px]" htmlFor="">Project Process ID</label>
-            <input
-            value={projectDetails.projectID}
-                onChange={(e) => {
-                    setProjectDetails(prevDetails => ({
-                    ...prevDetails,
-                    projectID: e.target.value 
-                    }));
-                }}
-            className="bg-[#666666] rounded-md py-[4px] px-[12px] text-[15px]" type="text" />
-            </div>
-            <div className="flex flex-col gap-[6px]">
-                <label className="text-[18px]" htmlFor="">Token Process ID</label>
-                <input 
-                value={projectDetails.projectTokenID}
-                onChange={(e) => {
-                    setProjectDetails(prevDetails => ({
-                    ...prevDetails,
-                    projectTokenID: e.target.value 
-                    }));
-                }}
-                className="bg-[#666666] rounded-md py-[4px] px-[12px] text-[15px]" type="text" />
-            </div>
-            <input
-            disabled={!validateInput(projectDetails.projectID, projectDetails.projectTokenID)}
-            className={`bg-[#101010] py-[6px] rounded-sm ${!validateInput(projectDetails.projectID, projectDetails.projectTokenID) ? "opacity-50 cursor-not-allowed" : "hover:opacity-60 cursor-pointer"}`} type="submit" value="Register Project" />
-        </form>
-    </main>
+      <>
+        <Navbar/>
+        <main className={`${brandDarkBg} pt-[120px] min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6`}>
+        {
+          currentAddress == ownerAddress && 
+            <OwnerForm/>
+        }
+        {
+          currentAddress !=ownerAddress && 
+            <RegisterProjectForm/>
+        }
+        </main>
+      </>
   )
 }
 
