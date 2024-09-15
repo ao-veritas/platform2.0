@@ -91,9 +91,13 @@ const Saturn = () => {
     
     const checkRecievedAoETH = async() =>{
         const transactionTable = await getAllTransactions();
+        if(!transactionTable){
+          alert("Error! Please contact admins")
+          return false
+        }
         console.log("for rec current:", currentTransTimestamp)
         let flag = false
-        transactionTable.map((transaction)=>{
+        transactionTable?.map((transaction)=>{
         //    console.log("in check trans: ", Number(transaction.Timestamp))
             if(Number(transaction.Timestamp)>currentTransTimestamp && transaction.Type =="btf"){
                 flag = true
@@ -104,9 +108,13 @@ const Saturn = () => {
     }
     const checkProjectConfirmedStake = async() =>{
         const transactionTable = await getAllTransactions();
+        if(!transactionTable){
+          alert("Error! Please contact admins")
+          return false
+        }
         console.log("for rec current:", currentTransTimestamp)
         let flag = false
-        transactionTable.map((transaction)=>{
+        transactionTable?.map((transaction)=>{
         //    console.log("in check trans: ", Number(transaction.Timestamp))
             if(Number(transaction.Timestamp)>currentTransTimestamp && transaction.Type =="ptf"){
                 flag = true
@@ -117,9 +125,13 @@ const Saturn = () => {
     }
     const checkRewardsSent = async() =>{
         const transactionTable = await getAllTransactions();
+        if(!transactionTable){
+          alert("Error! Please contact admins")
+          return false
+        }
         console.log("for rec current:", currentTransTimestamp)
         let flag = false
-        transactionTable.map((transaction)=>{
+        transactionTable?.map((transaction)=>{
         //    console.log("in check trans: ", Number(transaction.Timestamp))
             if(Number(transaction.Timestamp)>currentTransTimestamp && transaction.Type =="ftu"){
                 flag = true
@@ -311,7 +323,7 @@ const Saturn = () => {
                     <div className="flex items-center">
                       <div className={`flex items-center justify-center w-6 h-6 rounded-full border-teal-600 ${rewardsSent ? "bg-teal-600" : "bg-gray-800"} text-white`}>✓</div>
 
-                      <div className={`ml-4 ${rewardsSent ? "text-teal-300" : "text-white"} text-lg`}>${project.ticker} reward sent to your wallet</div>
+                      <div className={`ml-4 ${rewardsSent ? "text-teal-300" : "text-white"} text-lg`}>${project.token.ticker} reward sent to your wallet</div>
                     </div>
                   </div>
                   <button

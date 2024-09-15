@@ -1,14 +1,7 @@
-import { ConnectButton, useActiveAddress, useConnection } from 'arweave-wallet-kit';
+import { ConnectButton, useActiveAddress } from 'arweave-wallet-kit';
 import Navbar from '../components/Layout/Navbar';
 import { brandDarkBg } from '../_utils/colors';
 import { Footer, TaoEthBalance, TaoEthStaked } from '../components';
-
-type UserStakes = {
-    UserID: string;
-    TokenID: string;
-    TotalStaked: string;
-    ProjectID: string;
-  };
 
 
 const User = () => {
