@@ -50,7 +50,7 @@ export default function Navbar() {
           </a>{" "}
         </div>
         <div className="md:block hidden">
-          <ConnectButton />
+          <ConnectButton accent="rgb(14, 156, 156)"/>
         </div>    
       </div>
     </nav>

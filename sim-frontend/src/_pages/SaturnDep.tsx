@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Nav from "../_components/Nav"
+import Nav from "../components/Nav"
 import stake from "../_utils/stake";
 type UserTokensResult = {
   Name?: string;

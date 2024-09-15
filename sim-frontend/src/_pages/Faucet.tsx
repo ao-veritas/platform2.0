@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { createDataItemSigner, message, result } from "@permaweb/aoconnect";
 import { useUserAoETH } from "../_utils/useAoEth";
 import { AOETH_TOKEN_PID } from "../_utils/constants";
-import Loader from "../_components/Loader";
+import Loader from "../components/Loader";
 
 export default function Faucet() {
   const address = useActiveAddress();
