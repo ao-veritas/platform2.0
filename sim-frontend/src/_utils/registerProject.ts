@@ -1,4 +1,4 @@
-import { connect, createDataItemSigner, message, result } from "@permaweb/aoconnect";
+import { createDataItemSigner, message, result } from "@permaweb/aoconnect";
 
 type ProjectDetails = {
     projectID: string;

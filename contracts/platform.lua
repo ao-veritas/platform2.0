@@ -521,3 +521,13 @@ Handlers.add(
         Handlers.utils.reply(json.encode(projects))(msg)
     end
 )
+
+Handlers.add(
+    "InfoTransactions",
+    Handlers.utils.hasMatchingTag("Action", "Info-Transactions"),
+    function(msg)
+        local transactions = sql_run([[SELECT * FROM Transactions]]);
+        print(transactions)
+        Handlers.utils.reply(json.encode(transactions))(msg)
+    end
+)

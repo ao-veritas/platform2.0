@@ -1,8 +1,8 @@
 import { dryrun } from "@permaweb/aoconnect";
 import { useEffect, useState } from "react";
-import { AOETH_TOKEN_PID } from "./constants";
 
 export function useUserAoETH(address?: string) {
+  const AOETH_TOKEN_PID = import.meta.env.VITE_TAOETH_ID;
   const [aoeth, setAoeth] = useState<number | null>(null);
   const fetchData = async () => {
     if (!address) return;

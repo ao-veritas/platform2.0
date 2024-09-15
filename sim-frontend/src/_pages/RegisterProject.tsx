@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { brandDarkBg } from "../_utils/colors";
-import { Navbar, OwnerForm, RegisterProjectForm } from "../components";
+import { Footer, Navbar, OwnerForm, RegisterProjectForm } from "../components";
 
 const RegisterProject = () => {
   const ownerAddress = import.meta.env.VITE_OWNER_ADDRESS;
@@ -25,6 +25,7 @@ const RegisterProject = () => {
             <RegisterProjectForm/>
         }
         </main>
+        <Footer/>
       </>
   )
 }

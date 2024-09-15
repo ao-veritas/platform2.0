@@ -1,5 +1,5 @@
 import { brandDarkBg } from "../_utils/colors";
-import { Navbar, TeamCard } from "../components";
+import { Footer, Navbar, TeamCard } from "../components";
 
 export default function About() {
   return (
@@ -51,6 +51,7 @@ export default function About() {
           last={false}
         />
       </div>
-    </main></>
+    </main>
+    <Footer/></>
   );
 }

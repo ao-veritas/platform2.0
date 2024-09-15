@@ -1,4 +1,4 @@
-import { connect, createDataItemSigner, message, result } from "@permaweb/aoconnect";
+import { createDataItemSigner, message, result } from "@permaweb/aoconnect";
 
 const platformID = import.meta.env.VITE_PLATFORM_ID;
 const taoethID = import.meta.env.VITE_TAOETH_ID;

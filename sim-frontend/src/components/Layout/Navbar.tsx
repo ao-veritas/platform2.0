@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   // let path = window.location.hash.split("#");
   let path = location.pathname.split("/");
-  console.log(path[1])
+  // console.log(path[1])
   // const validPaths = ["about", "profile", "faucet", "project", "addProject", ""];
   // let pageTitle = validPaths.includes(path[1]?.toLowerCase()) ? path[1] : "Home"; 
   // const toggleMenu = () => {
