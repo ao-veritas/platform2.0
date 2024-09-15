@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
-import { useConnection } from "arweave-wallet-kit";
 import { brandDarkBg } from "../_utils/colors";
 import { Navbar, OwnerForm, RegisterProjectForm } from "../components";
 
 const RegisterProject = () => {
   const ownerAddress = import.meta.env.VITE_OWNER_ADDRESS;
   const [currentAddress, setCurrentAddress] = useState("");
-  const {connected} = useConnection();
     useEffect(() => {
       getAddress();
     }, [])

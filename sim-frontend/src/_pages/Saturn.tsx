@@ -1,10 +1,9 @@
-import { useState } from "react"
 import { brandDarkBg, brandDarkBorder, brandSecondaryBg, brandSecondaryText } from "../_utils/colors"
-import { Navbar } from "../components"
+import { Navbar, ProjectStakes } from "../components"
 
 
 const Saturn = () => {
-    const [totalStaked, setTotalStaked] = useState(0)
+    const projectID:string = import.meta.env.VITE_SATURN_ID;
   return (
     <>
         <Navbar/>
@@ -47,10 +46,7 @@ const Saturn = () => {
                     </div>
                 </section>
                 <section className="flex flex-col gap-3">
-                    <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
-                        <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Overall Staked</h3>
-                        <h4>${totalStaked}</h4>
-                    </div>
+                    <ProjectStakes projectID={projectID}/>
                     <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
                         <div className="flex flex-row items-center justify-between">
                         <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium `}><span className="uppercase">${project.token.name}</span> Token</h3>

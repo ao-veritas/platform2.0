@@ -8,7 +8,13 @@ type UserStakes = {
     ProjectID: string;
   };
 
-const userStakes = async() => {
+  type ProjectData = {
+    TaoEthStaked: number;
+    ProjectTokenID: string;
+    ProjectID: string;
+  }
+
+export const userStakes = async() => {
     const userAddress = await window.arweaveWallet.getActiveAddress();
     let { Error, Messages } = await dryrun({
         process: platformID,
@@ -38,4 +44,32 @@ export const getTaoEthStake = async() => {
   return taoEthStaked
 }
 
-export default userStakes;
+export const projectDetails = async() => {
+  let { Error, Messages } = await dryrun({
+    process: platformID,
+    tags: [
+      { name: "Action", value: "Info-Projects" },
+    ],
+  });
+  const tempTable = JSON.parse(Messages[0].Data)
+  const projectData:ProjectData[] = []
+  tempTable.map((project:ProjectData) => {
+        projectData.push(project)
+  })
+  console.log("other:", projectData)
+  return projectData; 
+}
+
+export const getProjectStake = async(projectID:String) =>{
+  console.log("came in id:", projectID)
+  const projectsTable = await projectDetails();
+  let amount = "0";
+  projectsTable.map((project:ProjectData) => {
+    if(project.ProjectID == projectID){
+      console.log("found project id")
+      console.log(project.TaoEthStaked)
+      amount = project.TaoEthStaked.toString();
+    }
+  })
+  return amount
+}
