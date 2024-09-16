@@ -1,10 +1,9 @@
 // import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { ProjectType } from "../../_utils/types";
 import { useEffect, useState } from "react";
 import { getTaoEthStake, pTokenRecieved } from "../../_utils/info";
-import { p } from "framer-motion/client";
 import { brandSecondaryText } from "@/_utils/colors";
+import { PinContainer } from "../ui/3d-pin";
 
 export default function ProjectCard({ project }: { project: ProjectType }) {
   const [taoEthStaked, setTaoEthStaked] = useState<number>(0);
@@ -23,11 +22,14 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
   }
 
   return (
-    <Link
-      to={"/project/" + project?.processID}
+    <PinContainer
+        title={project.name}
+        href={"/project/" + project?.processID}
+      >
+    <div
       // to={"/saturn"}
-      className="w-[390px] h-[210px] rounded-lg place-self-center
-      flex flex-col gap-[6px] bg-zinc-900 justify-between items-start py-[15px] px-[21px] mb-10"
+      className="w-[345px] h-[180px] rounded-[9px] place-self-center
+      flex flex-col gap-[6px] bg-[#00000000] justify-between items-start py-[9px] px-[21px] mb-10"
     >
       <div className="flex w-full h-1/2 gap-2">
         <div className="w-1/4 h-16">
@@ -61,6 +63,6 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
           <button className="border border-teal-700 text-teal-600 hover:border-teal-600 hover:text-teal-600 py-1 px-2 rounded-lg">Unstake</button>
         </div></>: <p className={`${brandSecondaryText} text-[10.5px]`}>Mainnet Staking will be live after in Feb 2025. Know more about the project till then!</p>}
       </div>
-    </Link>
+    </div></PinContainer>
   );
 }

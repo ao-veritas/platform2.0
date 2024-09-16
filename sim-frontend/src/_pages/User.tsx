@@ -3,6 +3,7 @@ import Navbar from '../components/Layout/Navbar';
 import { brandDarkBg } from '../_utils/colors';
 import { Footer, TaoEthBalance, TaoEthStaked } from '../components';
 import ProjectCard from '../components/Landing/ProjectCard';
+import { BackgroundBeams } from '@/components/ui/background-beams';
 
 
 const User = () => {
@@ -37,6 +38,7 @@ const User = () => {
           </div>
         </main>
         <Footer/>
+        <BackgroundBeams/>
     </>
   )
 }

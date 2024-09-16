@@ -10,6 +10,7 @@ const HomePage = () => {
         <ProjectsDisplay/>
       </main>
       <Footer/>
+
     </>
   )
 }

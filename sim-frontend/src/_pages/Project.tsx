@@ -1,15 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { brandDarkBg, brandDarkBorder, brandSecondaryBg, brandSecondaryText } from "../_utils/colors"
-import { Footer, Navbar, ProjectStakes } from "../components"
-import { useActiveAddress } from "arweave-wallet-kit";
-import { useUserAoETH } from "../_utils/useAoEth";
-import { humanizeDuration } from "../_utils/helpers";
-import stake from "../_utils/stake";
-import Loader from "../components/Loader";
-import { getAllTransactions } from "../_utils/info";
+import { Footer, Navbar,  } from "../components"
+
 import { projects } from "@/_utils/projects";
 import { ProjectType } from "@/_utils/types";
-import { h1 } from "framer-motion/client";
+
 
 const Project = ({pid}:any) => {
   const [currentProject, setCurrentProject] = useState<ProjectType>()

@@ -1,3 +1,4 @@
+import { BackgroundBeams } from "@/components/ui/background-beams";
 import { brandDarkBg } from "../_utils/colors";
 import { Footer, Navbar, TeamCard } from "../components";
 
@@ -6,7 +7,7 @@ export default function About() {
     <>
      <Navbar/>
     <main
-      className={`${brandDarkBg} flex flex-col items-center md:justify-center justify-between text-[#f1f1f1] pt-[120px] min-h-[100vh]`}>
+      className={`${brandDarkBg} flex flex-col items-center md:justify-center justify-between text-[#f1f1f1] pt-[0px] min-h-[93vh]`}>
       <h1
         className="uppercase tracking-wider font-bold leading-[51px]
       xl:text-[45px] text-[36px] text-[#4FD2DE]"
@@ -52,6 +53,6 @@ export default function About() {
         />
       </div>
     </main>
-    <Footer/></>
+    <Footer/>      <BackgroundBeams /></>
   );
 }

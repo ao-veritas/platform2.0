@@ -1,7 +1,9 @@
 
+import { HeroCover } from "../ui/coverHero";
+
 const Hero = () => {
   return (
-    <section className="w-full text-[#eeeeee] flex flex-col justify-center items-center lg:px-20 px-6 pt-[15px] pb-[90px]">
+    <section className="w-full text-[#eeeeee] flex flex-col justify-center items-center lg:px-20 px-6 pt-[60px] pb-[120px]">
       <div className="relative flex flex-row justify-between items-center w-full">
         <div className="w-fit ltrAnim">
           <img
@@ -17,7 +19,7 @@ const Hero = () => {
         </div>
         <h1 className="lg:text-[36px] md:text-[27px] text-[18px]
         ttbAnim text-center z-10 w-fit mx-[-120px]">
-          Explore the <span className=" text-[#40959D] block">Permissonless Ecosystem Funding</span> platform on AO
+          Explore the <HeroCover><span className=" text-[#40959D] block">Permissonless Ecosystem Funding</span></HeroCover> platform on AO
         </h1>
         <div className="w-fit rtlAnim">
           <img
