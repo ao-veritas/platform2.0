@@ -1,3 +1,5 @@
+import { brandDarkBg } from "@/_utils/colors"
+import Navbar from "./Layout/Navbar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, RadarChart, PolarGrid, PolarAngleAxis, Radar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
 
@@ -54,10 +56,95 @@ export default function ProjectDashboard() {
   }))
 
   return (
-    <div className="p-4 space-y-4">
+    <>
+    <Navbar/>
+    <main className={`p-4 space-y-4 pt-[120px] ${brandDarkBg}`}>
       <h1 className="text-2xl font-bold">Project Dashboard: {project.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="col-span-full">
+      {/* project details */}
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Project Details</CardTitle>
+            <CardDescription>Key information about the project</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <p><strong>Process ID:</strong> {project.processID}</p>
+              <p><strong>Token ID:</strong> {project.tokenID}</p>
+              <p><strong>Messages Per Day:</strong> {project.messagesPerDay}</p>
+              <p><strong>Token Flow:</strong></p>
+              <ul className="list-disc list-inside pl-4">
+                <li>Daily: {project.tokenFlow.daily}</li>
+                <li>Weekly: {project.tokenFlow.weekly}</li>
+                <li>Monthly: {project.tokenFlow.monthly}</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      {/* stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Unique Users</CardTitle>
+            <CardDescription>User statistics over different time periods</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-lg font-semibold">Daily</h3>
+                <p className="text-3xl font-bold">{project.uniqueUsers.daily}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Weekly</h3>
+                <p className="text-3xl font-bold">{project.uniqueUsers.weekly}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Monthly</h3>
+                <p className="text-3xl font-bold">{project.uniqueUsers.monthly}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Lifetime</h3>
+                <p className="text-3xl font-bold">{project.uniqueUsers.lifetime}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        {/* Radar */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Unique Users</CardTitle>
+            <CardDescription>Radar chart of unique users over time periods</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={uniqueUsersData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <Radar name="Users" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* bar graph */}
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Project Tokens</CardTitle>
+            <CardDescription>Bar graph of project tokens</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={projectTokensData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* Area chart */}
+        <Card className="col-span-2">
           <CardHeader>
             <CardTitle>Types of Messages (Last 6 Months)</CardTitle>
             <CardDescription>Area chart showing message types over time</CardDescription>
@@ -78,22 +165,7 @@ export default function ProjectDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Unique Users</CardTitle>
-            <CardDescription>Radar chart of unique users over time periods</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={uniqueUsersData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <Radar name="Users" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-              </RadarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
+{/* pie chart */}
         <Card>
           <CardHeader>
             <CardTitle>Token Distribution</CardTitle>
@@ -122,72 +194,9 @@ export default function ProjectDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Tokens</CardTitle>
-            <CardDescription>Bar graph of project tokens</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={projectTokensData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Details</CardTitle>
-            <CardDescription>Key information about the project</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <p><strong>Process ID:</strong> {project.processID}</p>
-              <p><strong>Token ID:</strong> {project.tokenID}</p>
-              <p><strong>Messages Per Day:</strong> {project.messagesPerDay}</p>
-              <p><strong>Token Flow:</strong></p>
-              <ul className="list-disc list-inside pl-4">
-                <li>Daily: {project.tokenFlow.daily}</li>
-                <li>Weekly: {project.tokenFlow.weekly}</li>
-                <li>Monthly: {project.tokenFlow.monthly}</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Unique Users</CardTitle>
-            <CardDescription>User statistics over different time periods</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-semibold">Daily</h3>
-                <p className="text-3xl font-bold">{project.uniqueUsers.daily}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Weekly</h3>
-                <p className="text-3xl font-bold">{project.uniqueUsers.weekly}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Monthly</h3>
-                <p className="text-3xl font-bold">{project.uniqueUsers.monthly}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Lifetime</h3>
-                <p className="text-3xl font-bold">{project.uniqueUsers.lifetime}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </div>
+    </main>
+    </>
   )
 }
