@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import { getAllTransactions } from "../_utils/info";
 
 
+
 const Saturn = () => {
     const address = useActiveAddress();
     const projectID:string = import.meta.env.VITE_SATURN_ID;
@@ -457,114 +458,91 @@ export default Saturn
 //         percentage:""
 //     }]
 // }
-export const project = {
-    name: "0rbit",
-    processID:"BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ",
-    logoImageLink:"https://www.0rbit.co/logos/sqLightFill.svg",
-    bannerLink:"https://www.0rbit.co/logos/ogBanner.jpeg",
-    links: {
-        website: "https://0rbit.co/",
-        docs:"https://docs.0rbit.co/",
-        discord: "https://discord.gg/JVSjqaKJgV",
-        twitter: "https://twitter.com/0rbitco",
-        github: "https://github.com/0rbit-co",
-        telegram: "",
-        other: ["https://www.playground.0rbit.co/","https://mirror.xyz/0x26B11B188E9E69b2426FD6111302E721F423020E"]
+export const project =  {
+  name: "Saturn",
+  processID:"rXQaiyznUgDrt7A0Nzl9OQN2QBJ3we1X3qMe2W5DBXU",
+  logoImageLink:"https://wkypibie7ccprx5ujbbqddvhyotazjdchydxq6w4pd6j7hik5ipa.arweave.net/srD0BQT4hPjftEhDAY6nw6YMpGI-B3h63Hj8n50K6h4",
+  bannerLink:"/saturnBanner.png",
+  links: {
+      website: "/",
+      docs:"/",
+      discord: "https://discord.gg/MTP7BQgr",
+      twitter: "https://x.com/Veritas_ao",
+      github: "https://github.com/fundars/platform2.0",
+      telegram:"",
+      other: ["",""]
+  },
+  team: [{
+      officialName:"Alice Johnson",
+      pseudoName:"JohnDaughter",
+      role:"CEO",
+      imgLink:"https://jh2ukzgb546squzma2zxtkr6ckignjy7c6thm7xhe43aj7q3norq.arweave.net/SfVFZMHvPShTLAazeao-EpBmpx8XpnZ-5yc2BP4ba6M",
+      links:{
+          github:"",
+          twitter:"",
+          dribble:"",
+          other:["",""],
+      },
+  },
+  {
+      officialName:"Bob Smith",
+      pseudoName:"CryptoSmith",
+      role:"Co-Founder",
+      imgLink:"https://3v7icsuojvbggeifpyk6avvv5pz4vueyaj3kmzu65xvf5msqlgaq.arweave.net/3X6BSo5NQmMRBX4V4Fa16_PK0JgCdqZmnu3qXrJQWYE",
+      links:{
+          github:"",
+          twitter:"",
+          dribble:"",
+          other:["",""],
+      },
+  },
+ ],
+  exchangeInfo: {
+      cooldownPeriod: 10,
+      aoethRewardRate: 60
     },
-    team: [{
-        officialName:"Yash Garg",
-        pseudoName:"megabyte",
-        role:"Co-Founder",
-        imgLink:"https://0rbit.co/team/megabyte.png",
-        links:{
-            github:"https://github.com/megabyte0x",
-            twitter:"https://x.com/megabyte0x?t=WZYKcJAvN-CM7a6yU4lPNQ&s=09",
-            dribble:"",
-            other:["",""],
-        },
-    },
-    {
-        officialName:"Ayush Agrawal",
-        pseudoName:"lucifer0x17",
-        role:"Co-Founder",
-        imgLink:"https://0rbit.co/team/lucifer.png",
-        links:{
-            github:"https://github.com/Lucifer0x17",
-            twitter:"https://x.com/Lucifer0x17?t=fH5LRms3xy2hSPLJbNubaA&s=09",
-            dribble:"",
-            other:["",""],
-        },
-    },
-    {
-        officialName:"Manishi Bhatnagar",
-        pseudoName:"",
-        role:"UI/ UX Designer",
-        imgLink:"https://0rbit.co/team/manishi.png",
-        links:{
-            github:"",
-            twitter:"https://x.com/0xManishi?t=FKn7XBJwlIXwJR-f4KGkzw&s=09",
-            dribble:"https://dribbble.com/0xManishi",
-            other:["",""],
-        },
-    },
-    {
-        officialName:"Sarthak Shah",
-        pseudoName:"",
-        role:"Engineer",
-        imgLink:"https://0rbit.co/team/sarthak.png",
-        links:{
-            github:"https://github.com/Not-Sarthak",
-            twitter:"https://x.com/0xSarthak13?t=nvsUz9hxhq2hQO25wr8Rtw&s=09",
-            dribble:"",
-            other:["",""],
-        },
-    }],
-    exchangeInfo:{
-        cooldownPeriod:60,
-        aoethRewardRate:10,
-    },
-    description: "The Decentralized Oracle Network on AO for accessing any off-chain data.",
-    oneLiner: "Decentralized Oracle Network on Arweave",
-    token: {
-        name:"0rbt",
-        ticker:"0RBT",
-        processId:"BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc",
-        denomination:"",
-        totalSupply:"",
-        tokenomics:{
-            info:"",
-            linkToBlogorPaper:""
-        }
-    },
-    gettingStartedGuide:"",
-    projectOrigin:"",
-    useCases: [{
-        name:"",
-        info:"",
-        liveLink:"",
-        other:[""]
-    }],
-    advisorsInvestors:[{
-        name:"",
-        role:"",
-        moreInfo:"",
-        amountIfAny:[""],
-    }],
-    mileStones:[{
-        goal:"",
-        date:"",
-        proof:"",
-        status:""
-    }],
-    mediaMentions:[""],
-    collaborations:[{
-        name:"",
-        link:"",
-        info:""
-    }],
-    ownershipPercentages:[{
-        name:"",
-        role:"",
-        percentage:""
-    }]
+  description: "The Decentralized Dummy Project Functionality of Veritas. Lorem Ipsum Dolor Sit amet.",
+  oneLiner: "Decentralized Dummy Placeholder Project",
+  token: {
+      name:"Sat",
+      ticker:"SAT",
+      processId:"lrTtKXMhdmMSi8ZfTsdSX24Xpm9FAo47CRHe82HZ7XA",
+      denomination:"",
+      totalSupply:"",
+      tokenomics:{
+          info:"",
+          linkToBlogorPaper:""
+      }
+  },
+  gettingStartedGuide:"",
+  projectOrigin:"",
+  useCases: [{
+      name:"",
+      info:"",
+      liveLink:"",
+      other:[""]
+  }],
+  advisorsInvestors:[{
+      name:"",
+      role:"",
+      moreInfo:"",
+      amountIfAny:[""],
+  }],
+  mileStones:[{
+      goal:"",
+      date:"",
+      proof:"",
+      status:""
+  }],
+  mediaMentions:[""],
+  collaborations:[{
+      name:"",
+      link:"",
+      info:""
+  }],
+  ownershipPercentages:[{
+      name:"",
+      role:"",
+      percentage:""
+  }]
 }
