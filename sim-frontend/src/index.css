@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  background-color: #161515;
+}
 
 *{
     box-sizing: border-box;

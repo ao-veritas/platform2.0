@@ -33,7 +33,7 @@ const tabs = [
     title: "0rbit",
     value: "0rbit",
     content: (
-      <div className="bg-[#000000] w-full">
+      <div className="bg-[#161515] w-full py-3">
       <OnChain0rbit/>
       </div>
     ),
@@ -42,7 +42,7 @@ const tabs = [
     title: "BetterIDEa",
     value: "BetterIDEa",
     content: (
-    <div className="bg-[#000000]"><OnChain0rbit/></div>
+    <div className="bg-[#161515] w-full py-3"><OnChain0rbit/></div>
     ),
   },
 ];
