@@ -1,5 +1,4 @@
 import {dryrun} from "@permaweb/aoconnect";
-import { useActiveAddress } from "arweave-wallet-kit";
 const platformID = import.meta.env.VITE_PLATFORM_ID;
 const saturnTokenID = import.meta.env.VITE_SATURN_TOKEN_ID;
 
