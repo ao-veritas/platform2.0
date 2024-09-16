@@ -48,6 +48,10 @@ export default function Navbar() {
           ${path[1]=="faucet"? `${brandSecondaryText} underline`: brandLightText}`} href="/faucet">
             Faucet
           </a>{" "}
+          <a className={`hover:text-[#40959D] hover:underline underline-offset-[3px]
+          ${path[1]=="dashboard"? `${brandSecondaryText} underline`: brandLightText}`} href="/dashboard">
+            Analysis Dashboards
+          </a>{" "}
         </div>
         <div className="md:block hidden">
           <ConnectButton accent="rgb(14, 156, 156)"/>

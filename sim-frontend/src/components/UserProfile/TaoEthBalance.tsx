@@ -14,7 +14,7 @@ const TaoEthBalance = () => {
   return (
     <div>
         <div className="flex flex-col justify-start items-start">
-        <h2 className="text-[#40959D] text-[27px] tracking-normal">$AoEth Balance:</h2>
+        <h2 className="text-[#000000] text-[27px] tracking-normal">$AoEth Balance:</h2>
         {balance == "" ? (
           <div className="animate-pulse space-y-2">
             <div className="bg-gray-300 h-6 w-48 rounded"></div>

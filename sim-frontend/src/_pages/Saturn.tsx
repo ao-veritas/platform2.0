@@ -146,8 +146,8 @@ const Saturn = () => {
         <Navbar/>
         <main className={`${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC] font-raleway`}>
             <section className="">
-                <img src={project.bannerLink} alt="" className="rounded-md max-h-[300px]"/>
-                <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-md w-fit`}>
+                <img src={project.bannerLink} alt="" className="rounded-[9px] max-h-[300px]"/>
+                <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-[9px] w-fit`}>
                     <img src={project.logoImageLink} alt="" className="w-[90px] h-[90px]"/>
                 </div>
             </section>
@@ -161,12 +161,12 @@ const Saturn = () => {
                 </div>
                 <button
                 onClick={openModalHandler}
-                className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-md px-[24px] py-[6px] text-[18px] font-medium`}>
+                className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-[9px] px-[24px] py-[6px] text-[18px] font-medium`}>
                     Stake Now
                 </button>
             </section>
             <section className="flex flex-row gap-3 w-full mb-[12px]">
-                <section className="w-full flex flex-col gap-6 rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                <section className="w-full flex flex-col gap-6 rounded-[9px] bg-[#1F1E1E] px-[24px] py-[12px]">
                     <div className="flex flex-col gap-[3px]">
                     <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Project Info</h3>
                     <p>{project.description}</p>
@@ -188,10 +188,10 @@ const Saturn = () => {
                 </section>
                 <section className="flex flex-col gap-3">
                     <ProjectStakes projectID={projectID}/>
-                    <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                    <div className="rounded-[9px] bg-[#1F1E1E] px-[24px] py-[12px]">
                         <div className="flex flex-row items-center justify-between">
                         <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium `}><span className="uppercase">${project.token.name}</span> Token</h3>
-                        <h4 className="bg-[#393939] rounded-sm px-[6px] py-[2px] text-[12px]">${project.token.ticker}</h4>
+                        <h4 className="bg-[#393939] rounded-[6px] px-[6px] py-[2px] text-[12px]">${project.token.ticker}</h4>
                         </div>
                         <div>
                             <h6>Total Supply:{project.token.totalSupply}</h6>
@@ -202,7 +202,7 @@ const Saturn = () => {
                     </div>
                 </section>
             </section>
-            <section className="rounded-lg bg-[#1F1E1E] px-[30px] py-[15px] mb-[12px]">
+            <section className="rounded-[9px] bg-[#1F1E1E] px-[30px] py-[15px] mb-[12px]">
                 <h2 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium pb-3`}>Team</h2>
                 <div className="flex flex-row items-center justify-between">
                 {project.team.map((member) => {
@@ -221,7 +221,7 @@ const Saturn = () => {
                 })}
                 </div>
             </section>
-            <section className="rounded-lg bg-[#1F1E1E] px-[30px] py-[15px] flex flex-col gap-6">
+            <section className="rounded-[9px] bg-[#1F1E1E] px-[30px] py-[15px] flex flex-col gap-6">
                 <div>
                 <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium pb-3`}>Getting Started with {project.name}</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus iste nulla aut! Minus non tenetur illo, delectus eius porro officiis illum culpa numquam quo dolore ipsa eveniet facilis tempore quasi.</p>
@@ -243,7 +243,7 @@ const Saturn = () => {
         <Footer/>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-[#626262] bg-opacity-50 backdrop-blur-sm">
-            <div className="relative w-fit max-w-[450px] bg-[#111111] p-8 rounded-lg ">
+            <div className="relative w-fit max-w-[450px] bg-[#111111] p-8 rounded-[9px] ">
             <button onClick={closeModalHandler} className="absolute top-2 right-4 text-2xl font-bold text-gray-500 hover:text-gray-600">
                 &times;
               </button>

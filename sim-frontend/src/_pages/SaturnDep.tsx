@@ -45,9 +45,9 @@
 //             onChange={(e) => {
 //                 setStakeAmount(Number(e.target.value))
 //             }}
-//             className="bg-[#666666] rounded-md py-[4px] px-[12px] text-[15px]" type="number" />
+//             className="bg-[#666666] rounded-[9px] py-[4px] px-[12px] text-[15px]" type="number" />
 //         </div>
-//         <input type="submit" value="Stake" className="bg-[#101010] py-[6px] rounded-sm hover:opacity-60 cursor-pointer px-[12px]"/>
+//         <input type="submit" value="Stake" className="bg-[#101010] py-[6px] rounded-[6px] hover:opacity-60 cursor-pointer px-[12px]"/>
 //       </form>
 //       <h3>MAX: {maxAvailable? maxAvailable:"Loading..."}</h3>
 //     </main>

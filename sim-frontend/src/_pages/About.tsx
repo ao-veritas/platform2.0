@@ -21,7 +21,8 @@ export default function About() {
         Meet the amazing team behind <span className={` tracking-wide text-[#4FD2DE]`}>Veritas</span>
       </h3>
       <div
-        className=" 
+        className="
+        z-50 
           xl:gap-6 
           md:gap-[18px] flex md:flex-row
           flex-col gap-3

@@ -45,7 +45,7 @@ if(connected){
   return (
     <>
     <Navbar/>
-    <main className={`flex flex-col gap-12  px-20 pt-[120px] ${brandDarkBg} min-h-[100vh] w-[100vw]`}>
+    <main className={` flex flex-col gap-12  px-20 pt-[120px] ${brandDarkBg} min-h-[100vh] w-[100vw]`}>
       <div className="flex flex-col justify-start items-start">
         <h2 className="text-[#40959D] text-[27px] tracking-widest">$tAoEth Balance:</h2>
         {aoethBalance == null ? (
@@ -71,7 +71,7 @@ if(connected){
           promise.finally(() => setLoading(false));
         }}
         disabled={loading}
-        className={`flex gap-4 w-fit ${loading ? "bg-gray-400" : "bg-[#205156]"} text-[#f1f1f1] py-[6px] px-[18px] rounded`}
+        className={`z-50 flex gap-4 w-fit ${loading ? "bg-gray-400" : "bg-[#205156]"} text-[#f1f1f1] py-[6px] px-[18px] rounded`}
       >
         {loading ? <Loader /> : ""}
         Get $tAoEth

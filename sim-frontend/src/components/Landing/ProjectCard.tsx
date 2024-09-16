@@ -37,7 +37,7 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
         </div>
         <div className="flex flex-col w-1/3 gap-1">
           <div className="font-[Raleway] text-white text-3xl tracking-normal pl-1">{project?.name}</div>
-          <div className="rounded-sm flex flex-row py-[3px] bg-[#393939] text-[#f1f1f1] gap-1 items-center">
+          <div className="rounded-[6px] flex flex-row py-[3px] bg-[#393939] text-[#f1f1f1] gap-1 items-center">
             <svg width="20" height="20">
               <circle cx="10" cy="10" r="7" />
             </svg>
@@ -59,8 +59,8 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
           </div>
         </div>
         <div className="flex flex-row gap-2 text-xs">
-          <button className="bg-teal-700 hover:bg-teal-600  text-black py-1 px-2 rounded-lg">Stake More</button>
-          <button className="border border-teal-700 text-teal-600 hover:border-teal-600 hover:text-teal-600 py-1 px-2 rounded-lg">Unstake</button>
+          <button className="bg-teal-700 hover:bg-teal-600  text-black py-1 px-2 rounded-[9px]">Stake More</button>
+          <button className="border border-teal-700 text-teal-600 hover:border-teal-600 hover:text-teal-600 py-1 px-2 rounded-[9px]">Unstake</button>
         </div></>: <p className={`${brandSecondaryText} text-[10.5px]`}>Mainnet Staking will be live after in Feb 2025. Know more about the project till then!</p>}
       </div>
     </div></PinContainer>

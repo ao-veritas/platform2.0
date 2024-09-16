@@ -11,9 +11,9 @@ const ProjectsDisplay = () => {
           <input
             type="text"
             placeholder="Search for Projects"
-            className=" text-[#f1f1f1] border-[1px] bg-[#00000000] rounded-md px-[12px] py-[6px] border-[#40959D] min-w-[310px]"
+            className=" text-[#f1f1f1] border-[1px] bg-[#00000000] rounded-[9px] px-[12px] py-[6px] border-[#40959D] min-w-[310px]"
           />
-          <a href="" className="bg-[#205156] rounded-sm p-[9px]">
+          <a href="" className="bg-[#205156] rounded-[6px] p-[9px]">
             <img alt="search" src="/icons/searchIcon.svg" className="w-[18px] h-[18px]" />
           </a>
         </div> */}

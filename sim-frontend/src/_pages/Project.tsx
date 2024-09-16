@@ -20,8 +20,8 @@ const Project = ({pid}:any) => {
         <Navbar/>
         {currentProject ?<main className={`${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC] font-raleway`}>
             <section className="">
-                <img src={currentProject.bannerLink?currentProject.bannerLink:dummyProject.bannerLink} alt="" className="rounded-md max-h-[300px]"/>
-                <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-md w-fit`}>
+                <img src={currentProject.bannerLink?currentProject.bannerLink:dummyProject.bannerLink} alt="" className="rounded-[9px] max-h-[300px]"/>
+                <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-[9px] w-fit`}>
                     <img src={currentProject.logoImageLink?currentProject.logoImageLink:dummyProject.logoImageLink} alt="" className="w-[90px] h-[90px]"/>
                 </div>
             </section>
@@ -35,12 +35,12 @@ const Project = ({pid}:any) => {
                 </div>
                 <button
 
-                className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-md px-[24px] py-[6px] text-[18px] font-medium`}>
+                className={`${brandSecondaryBg} hover:opacity-60 cursor-pointer rounded-[9px] px-[24px] py-[6px] text-[18px] font-medium`}>
                     Stake Now
                 </button>
             </section>
             <section className="flex flex-row gap-3 w-full mb-[12px]">
-                <section className="w-full flex flex-col gap-6 rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                <section className="w-full flex flex-col gap-6 rounded-[9px] bg-[#1F1E1E] px-[24px] py-[12px]">
                     <div className="flex flex-col gap-[3px]">
                         <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}>Project Info</h3>
                         <p>{currentProject.description ? currentProject.description : dummyProject.description}</p>
@@ -62,10 +62,10 @@ const Project = ({pid}:any) => {
                 </section>
                 <section className="flex flex-col gap-3">
                     {/* <ProjectStakes projectID={projectID}/> */}
-                    <div className="rounded-lg bg-[#1F1E1E] px-[24px] py-[12px]">
+                    <div className="rounded-[9px] bg-[#1F1E1E] px-[24px] py-[12px]">
                         <div className="flex flex-row items-center justify-between">
                             <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium`}><span className="uppercase">${currentProject.token.name ? currentProject.token.name : dummyProject.token.name}</span> Token</h3>
-                            <h4 className="bg-[#393939] rounded-sm px-[6px] py-[2px] text-[12px]">${currentProject.token.ticker ? currentProject.token.ticker : dummyProject.token.ticker}</h4>
+                            <h4 className="bg-[#393939] rounded-[6px] px-[6px] py-[2px] text-[12px]">${currentProject.token.ticker ? currentProject.token.ticker : dummyProject.token.ticker}</h4>
                         </div>
                         <div>
                             <h6>Total Supply: {currentProject.token.totalSupply ? currentProject.token.totalSupply : dummyProject.token.totalSupply}</h6>
@@ -76,7 +76,7 @@ const Project = ({pid}:any) => {
                     </div>
                 </section>
             </section>
-            <section className="rounded-lg bg-[#1F1E1E] px-[30px] py-[15px] mb-[12px]">
+            <section className="rounded-[9px] bg-[#1F1E1E] px-[30px] py-[15px] mb-[12px]">
                 <h2 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium pb-3`}>Team</h2>
                 <div className="flex flex-row items-center justify-between">
                 {currentProject.team.map((member, index) => {
@@ -95,7 +95,7 @@ const Project = ({pid}:any) => {
                 })}
                 </div>
             </section>
-            <section className="rounded-lg bg-[#1F1E1E] px-[30px] py-[15px] flex flex-col gap-6">
+            <section className="rounded-[9px] bg-[#1F1E1E] px-[30px] py-[15px] flex flex-col gap-6">
                 <div>
                     <h3 className={`text-[27px] leading-[30px] ${brandSecondaryText} font-medium pb-3`}>Getting Started with {currentProject.name ? currentProject.name : dummyProject.name}</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus iste nulla aut! Minus non tenetur illo, delectus eius porro officiis illum culpa numquam quo dolore ipsa eveniet facilis tempore quasi.</p>
