@@ -7,6 +7,10 @@ const project = {
     tokenID: "TKN-001",
     tokensHeld: [
       { id: "TKN-001", ticker: "ALPHA", quantity: "1000000" },
+      { id: "TKN-002", ticker: "BETA", quantity: "500000" },
+      { id: "TKN-002", ticker: "BETA", quantity: "500000" },
+      { id: "TKN-002", ticker: "BETA", quantity: "50000" },
+      { id: "TKN-002", ticker: "BETA", quantity: "700000" },
       { id: "TKN-002", ticker: "BETA", quantity: "500000" }
     ],
     distribution: [
@@ -23,7 +27,7 @@ const project = {
     ]
   }
   
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D']
+  const COLORS = ['#0E9C9C', '#0E9C9C', '#0E9C9C', '#0E9C9C', '#0E9C9C', '#0E9C9C']
 
 const OnChain0rbit = () => {
     const messageTypeData = project.typesOfMessages[0].lastSixMonths
@@ -111,7 +115,7 @@ const OnChain0rbit = () => {
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={uniqueUsersData}>
               <PolarGrid />
               <PolarAngleAxis dataKey="subject" />
-              <Radar name="Users" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              <Radar name="Users" dataKey="A" stroke="#8884d8" fill="#0E9C9C" fillOpacity={0.6} />
             </RadarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -130,7 +134,7 @@ const OnChain0rbit = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#8884d8" />
+              <Bar dataKey="value" fill="#0E9C9C" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -149,9 +153,9 @@ const OnChain0rbit = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Area type="monotone" dataKey="Type A" stackId="1" stroke="#8884d8" fill="#8884d8" />
-              <Area type="monotone" dataKey="Type B" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-              <Area type="monotone" dataKey="Type C" stackId="1" stroke="#ffc658" fill="#ffc658" />
+              <Area type="monotone" dataKey="Type A" stackId="1" stroke="#0E9C9C" fill="#0E9C9C" />
+              <Area type="monotone" dataKey="Type B" stackId="1" stroke="#407AE5" fill="#407AE5" />
+              <Area type="monotone" dataKey="Type C" stackId="1" stroke="#DFE6E9" fill="#DFE6E9" />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
@@ -171,7 +175,7 @@ const OnChain0rbit = () => {
                 cy="50%"
                 labelLine={false}
                 outerRadius={80}
-                fill="#8884d8"
+                // fill="#0E9C9C"
                 dataKey="value"
               >
                 {tokenDistributionData.map((index) => (
