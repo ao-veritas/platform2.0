@@ -6,6 +6,7 @@ import Saturn from './_pages/Saturn';
 import Faucet from './_pages/Faucet';
 import User from './_pages/User';
 import About from './_pages/About';
+import Dashboard from './_pages/Dashboard';
 
 const AppRouter: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const AppRouter: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/faucet" element={<Faucet />} />
         <Route path="/user" element={<User />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
