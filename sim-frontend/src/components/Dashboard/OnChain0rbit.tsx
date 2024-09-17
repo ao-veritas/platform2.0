@@ -37,7 +37,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-2 border border-gray-300 shadow-md">
-        <p className="text-gray-700 font-semibold">{`Date: ${label}`}</p>
+        <p className="text-gray-700 font-semibold">{`${label}`}</p>
         {payload.map((entry, index) => (
           <p key={index} className="text-gray-900">{`${entry.name}: ${entry.value}`}</p>
         ))}
@@ -51,61 +51,56 @@ const project = {
   name: "Project Alpha",
   processID: "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ",
   tokenID: "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc",
-  tokensHeld: [
-    { id: "TKN-001", ticker: "ALPHA", quantity: "1000000" },
-    { id: "TKN-002", ticker: "BETA", quantity: "500000" },
-    { id: "TKN-002", ticker: "BETA", quantity: "500000" },
-    { id: "TKN-002", ticker: "BETA", quantity: "50000" },
-    { id: "TKN-002", ticker: "BETA", quantity: "700000" },
-    { id: "TKN-002", ticker: "BETA", quantity: "500000" },
-  ],
-  distribution: [
-    { id: "DIST-001", quantity: "750000" },
-    { id: "DIST-002", quantity: "750000" },
-  ],
-  tokenFlow: { daily: "10000", weekly: "70000", monthly: "300000" },
-  messagesPerDay: "5000",
-  uniqueUsers: { daily: "1000", weekly: "5000", monthly: "15000", lifetime: "50000" },
-  typesOfMessages: [
-    { name: "Type A", lastSixMonths: { jan: "1000", feb: "1200", mar: "1100", apr: "1300", may: "1500", jun: "1400" } },
-    { name: "Type B", lastSixMonths: { jan: "800", feb: "900", mar: "1000", apr: "1100", may: "1200", jun: "1300" } },
-    { name: "Type C", lastSixMonths: { jan: "600", feb: "700", mar: "800", apr: "900", may: "1000", jun: "1100" } },
-  ],
 };
 
 const COLORS = ["#0E9C9C", "#407AE5", "#FF6B6B", "#FFD93D", "#4CAF50", "#9C27B0"];
 
 const OnChain0rbit = () => {
+  const sortedTokenBalances = useMemo(() => {
+    if (!tokenBalances) return [];
+    // divide each quantity by 10^12
+    // remove the project.tokenID from the array
+    const sorted = tokenBalances
+      .filter((item) => item.address !== project.tokenID)
+      .sort((a, b) => b.quantity - a.quantity)
+      .map((item) => ({ address: item.address, quantity: item.quantity / 10 ** 12 }));
+    return sorted;
+  }, []);
+
   const processedTokenBalances = useMemo(() => {
     if (!tokenBalances) return [];
     // divide each quantity by 10^12
-    const sorted = tokenBalances.sort((a, b) => b.quantity - a.quantity).map((item) => ({ address: item.address, quantity: item.quantity / 10 ** 12 }));
+    // remove the project.tokenID from the array
 
-    const top10 = sorted.slice(0, 5);
-    const others = sorted.slice(5).reduce((acc, curr) => ({ address: "Others", quantity: acc.quantity + curr.quantity }), { address: "Others", quantity: 0 });
+    const top10 = sortedTokenBalances.slice(0, 5);
+    const others = sortedTokenBalances.slice(5).reduce((acc, curr) => ({ address: "Others", quantity: acc.quantity + curr.quantity }), { address: "Others", quantity: 0 });
     return [...top10, others].filter((item) => item.quantity > 0);
-  }, []);
-  // const messageTypeData = project.typesOfMessages[0].lastSixMonths;
-  // const messageTypeChartData = Object.entries(messageTypeData).map(([month]) => ({
-  //   month,
-  //   "Type A": parseInt(project.typesOfMessages[0].lastSixMonths[month]),
-  //   "Type B": parseInt(project.typesOfMessages[1].lastSixMonths[month]),
-  //   "Type C": parseInt(project.typesOfMessages[2].lastSixMonths[month]),
-  // }));
+  }, [sortedTokenBalances]);
 
-  // const uniqueUsersData = [
-  //   { subject: "Daily", A: parseInt(project.uniqueUsers.daily) },
-  //   { subject: "Weekly", A: parseInt(project.uniqueUsers.weekly) },
-  //   { subject: "Monthly", A: parseInt(project.uniqueUsers.monthly) },
-  //   { subject: "Lifetime", A: parseInt(project.uniqueUsers.lifetime) },
-  // ];
+  const histogramData = useMemo(() => {
+    const buckets = [0, 100, 1000, 10000, 100000, 1000000, Infinity];
+    const labels = ["0-100", "100-1K", "1K-10K", "10K-100K", "100K-1M", "1M+"];
+    const counts = new Array(buckets.length - 1).fill(0);
 
-  // Process token balances to show top 10 and group the rest
+    sortedTokenBalances.forEach(({ quantity }) => {
+      for (let i = 0; i < buckets.length - 1; i++) {
+        if (quantity >= buckets[i] && quantity < buckets[i + 1]) {
+          counts[i]++;
+          break;
+        }
+      }
+    });
+
+    return labels.map((label, index) => ({
+      range: label,
+      count: counts[index],
+    }));
+  }, [sortedTokenBalances]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
       {/* project details */}
-      <Card className="col-span-2">
+      <Card className="col-span-4">
         <CardHeader>
           <CardTitle>Project Details</CardTitle>
           <CardDescription>Key information about the project</CardDescription>
@@ -127,8 +122,8 @@ const OnChain0rbit = () => {
           </div>
         </CardContent>
       </Card>
-      {/* stats */}
-      <Card>
+      {/* user stats */}
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Unique Users</CardTitle>
           <CardDescription>Current user statistics as of {userMetrics[userMetrics.length - 1].date}</CardDescription>
@@ -154,48 +149,12 @@ const OnChain0rbit = () => {
           </div>
         </CardContent>
       </Card>
-      {/* Line chart */}
-      <Card className="col-span-2">
-        <CardHeader>
-          <CardTitle>Lifetime Users</CardTitle>
-          <CardDescription>The total unique user growth</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            {/* make a line graph */}
-            <LineChart data={uniqueUsersData}>
-              <Line dot={false} type="monotone" dataKey="count" stroke="#0E9C9C" />
-              <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2">
-        <CardHeader>
-          <CardTitle>User Metrics</CardTitle>
-          <CardDescription>The DAU, WAU and MAU for the project</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            {/* make a line graph */}
-            <LineChart data={userMetrics}>
-              <Line dot={false} type="monotone" dataKey="dau" stroke="#0E9C9C" />
-              <Line dot={false} type="monotone" dataKey="wau" stroke="#407AE5" />
-              <Line dot={false} type="monotone" dataKey="mau" stroke="#FF6B6B" />
-              <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      {/* pie graph */}
-      <Card className="col-span-1">
+
+      {/* Token Distribution */}
+      <Card className="col-span-3">
         <CardHeader>
           <CardTitle>Token Distribution</CardTitle>
-          <CardDescription>Pie chart of token distribution</CardDescription>
+          <CardDescription>Pie chart of token distribution (without project token address)</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -224,8 +183,66 @@ const OnChain0rbit = () => {
           </ResponsiveContainer>
         </CardContent>
       </Card>
-      {/* Area chart */}
+
+      {/* Token Balance Histogram */}
+      <Card className="col-span-3">
+        <CardHeader>
+          <CardTitle>Token Balance Distribution</CardTitle>
+          <CardDescription>Histogram of token balances</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart margin={{ top: 20, right: 30, left: 20, bottom: 40 }} data={histogramData}>
+              <XAxis label={{ value: "Token Balance Range", position: "bottom", offset: 0, style: { textAnchor: "middle" } }} dataKey="range" />
+              <YAxis label={{ value: "Number of Holders", angle: -90, position: "insideLeft", style: { textAnchor: "middle" } }} />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="count" fill="#0E9C9C" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* user metrics */}
+      <Card className="col-span-4">
+        <CardHeader>
+          <CardTitle>User Metrics</CardTitle>
+          <CardDescription>The DAU, WAU and MAU for the project</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            {/* make a line graph */}
+            <LineChart data={userMetrics}>
+              <Line dot={false} type="monotone" dataKey="dau" stroke="#0E9C9C" />
+              <Line dot={false} type="monotone" dataKey="wau" stroke="#407AE5" />
+              <Line dot={false} type="monotone" dataKey="mau" stroke="#FF6B6B" />
+              <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
+              <YAxis label={{ value: "Number of Users", angle: -90, position: "insideLeft", style: { textAnchor: "middle" } }} />
+              <Tooltip content={<CustomTooltip />} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      {/* Lifetime Users */}
       <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle>Lifetime Users</CardTitle>
+          <CardDescription>The total unique user growth</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            {/* make a line graph */}
+            <LineChart data={uniqueUsersData}>
+              <Line dot={false} type="monotone" dataKey="count" stroke="#0E9C9C" />
+              <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
+              <YAxis label={{ value: "Number of Users", angle: -90, position: "insideLeft", style: { textAnchor: "middle" } }} />
+              <Tooltip content={<CustomTooltip />} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Area chart */}
+      <Card className="col-span-4">
         <CardHeader>
           <CardTitle>Message Activity</CardTitle>
           <CardDescription>Area chart showing messages sent by users over time</CardDescription>
@@ -233,9 +250,9 @@ const OnChain0rbit = () => {
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={messageActivity}>
-              <CartesianGrid strokeDasharray="3 3" />
+              {/* <CartesianGrid strokeDasharray="3 3" /> */}
               <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
-              <YAxis />
+              <YAxis label={{ value: "Number of Messages", angle: -90, position: "insideLeft", style: { textAnchor: "middle" } }} />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Area type="monotone" dataKey="Post-Real-Data" stackId="1" stroke="#0E9C9C" fill="#0E9C9C" />
@@ -245,7 +262,7 @@ const OnChain0rbit = () => {
         </CardContent>
       </Card>
       {/* pie chart */}
-      <Card>
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Message Distribution</CardTitle>
           <CardDescription>Pie chart of message distribution</CardDescription>
