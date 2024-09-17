@@ -26,7 +26,7 @@ export function TokenBalancesPieChart({
   return (
     <PieChart>
       <Pie nameKey="address" data={[{ quantity: 5, address: "2342" }]} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#0E9C9C" dataKey="quantity">
-        {[{ quantity: 5, address: "2342" }].map((value, index) => (
+        {[{ quantity: 5, address: "2342" }].map((_, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>

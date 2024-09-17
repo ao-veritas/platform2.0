@@ -36,13 +36,13 @@ const tabs = [
       </div>
     ),
   },
-  {
-    title: "BetterIDEa",
-    value: "BetterIDEa",
-    content: (
-      <div className="bg-[#161515] w-full py-3">
-        <OnChain0rbit />
-      </div>
-    ),
-  },
+  // {
+  //   title: "BetterIDEa",
+  //   value: "BetterIDEa",
+  //   content: (
+  //     <div className="bg-[#161515] w-full py-3">
+  //       <OnChain0rbit />
+  //     </div>
+  //   ),
+  // },
 ];
