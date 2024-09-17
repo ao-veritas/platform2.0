@@ -23,7 +23,7 @@ import {
 } from "recharts";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
-import { messageActivity, messageDistribution, tokenBalances, uniqueUsersData } from "./0rbitData";
+import { messageActivity, messageDistribution, tokenBalances, uniqueUsersData, userMetrics } from "./0rbitData";
 import { format } from "date-fns";
 import { TokenBalancesPieChart } from "./TokenBalances";
 import { useMemo } from "react";
@@ -131,31 +131,31 @@ const OnChain0rbit = () => {
       <Card>
         <CardHeader>
           <CardTitle>Unique Users</CardTitle>
-          <CardDescription>User statistics over different time periods</CardDescription>
+          <CardDescription>Current user statistics as of {userMetrics[userMetrics.length - 1].date}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h3 className="text-lg font-semibold">Daily</h3>
-              <p className="text-3xl font-bold">{project.uniqueUsers.daily}</p>
+              <p className="text-3xl font-bold">{userMetrics[userMetrics.length - 1].dau}</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold">Weekly</h3>
-              <p className="text-3xl font-bold">{project.uniqueUsers.weekly}</p>
+              <p className="text-3xl font-bold">{userMetrics[userMetrics.length - 1].wau}</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold">Monthly</h3>
-              <p className="text-3xl font-bold">{project.uniqueUsers.monthly}</p>
+              <p className="text-3xl font-bold">{userMetrics[userMetrics.length - 1].mau}</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold">Lifetime</h3>
-              <p className="text-3xl font-bold">{project.uniqueUsers.lifetime}</p>
+              <p className="text-3xl font-bold">{uniqueUsersData[uniqueUsersData.length - 1].count}</p>
             </div>
           </div>
         </CardContent>
       </Card>
       {/* Line chart */}
-      <Card>
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Lifetime Users</CardTitle>
           <CardDescription>The total unique user growth</CardDescription>
@@ -172,8 +172,27 @@ const OnChain0rbit = () => {
           </ResponsiveContainer>
         </CardContent>
       </Card>
-      {/* pie graph */}
       <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle>User Metrics</CardTitle>
+          <CardDescription>The DAU, WAU and MAU for the project</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            {/* make a line graph */}
+            <LineChart data={userMetrics}>
+              <Line dot={false} type="monotone" dataKey="dau" stroke="#0E9C9C" />
+              <Line dot={false} type="monotone" dataKey="wau" stroke="#407AE5" />
+              <Line dot={false} type="monotone" dataKey="mau" stroke="#FF6B6B" />
+              <XAxis interval={"preserveStartEnd"} angle={-45} textAnchor="end" height={50} dataKey="date" tickFormatter={(dateString) => format(new Date(dateString), "dd-MMM")} />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      {/* pie graph */}
+      <Card className="col-span-1">
         <CardHeader>
           <CardTitle>Token Distribution</CardTitle>
           <CardDescription>Pie chart of token distribution</CardDescription>
