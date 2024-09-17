@@ -124,18 +124,23 @@ function totalUserActivity() {
         const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
 
         if (!userActivity[date]) {
-            userActivity[date] = { total: new Set(), [action]: new Set() };
+            userActivity[date] = { total: new Set(), [action]: new Set(), addresses: new Set() };
         } else if (!userActivity[date][action]) {
             userActivity[date][action] = new Set();
         }
 
         userActivity[date][action].add(user);
         userActivity[date].total.add(user);
+        userActivity[date].addresses.add(user);
     });
 
-    // Convert userActivity object to an array of { date, total, "Post-Real-Data", "Get-Real-Data" }
+    // write to file
+    // fs.writeFileSync('temptotalUserActivity.json', JSON.stringify(userActivity, null, 2));
+
+
+    // Convert userActivity object to an array of { date, total, "Post-Real-Data", "Get-Real-Data", addresses }
     const result = Object.entries(userActivity).map(([date, counts]) => {
-        const entry = { date, total: counts.total.size };
+        const entry = { date, total: counts.total.size, addresses: Array.from(counts.addresses) };
         actions.forEach(action => {
             entry[action] = counts[action]?.size || 0;
         });
@@ -147,6 +152,34 @@ function totalUserActivity() {
 
     // write to file
     fs.writeFileSync('totalUserActivity.json', JSON.stringify(result, null, 2));
+
+     // Calculate DAU, WAU, and MAU
+     const calculateActiveUsers = (data, windowSize) => {
+        return data.map((entry, index) => {
+            const window = data.slice(Math.max(0, index - windowSize + 1), index + 1);
+            const uniqueUsers = new Set(window.flatMap(item => item.addresses));
+            return {
+                date: entry.date,
+                activeUsers: uniqueUsers.size
+            };
+        });
+    };
+
+    const dau = result.map(entry => ({ date: entry.date, activeUsers: entry.total }));
+    const wau = calculateActiveUsers(result, 7);
+    const mau = calculateActiveUsers(result, 30);
+
+    // Combine DAU, WAU, and MAU into a single array
+    const combinedMetrics = result.map((entry, index) => ({
+        date: entry.date,
+        dau: dau[index].activeUsers,
+        wau: wau[index].activeUsers,
+        mau: mau[index].activeUsers
+    }));
+
+    // Write combined metrics to file
+    fs.writeFileSync('userActivityMetrics.json', JSON.stringify(combinedMetrics, null, 2));
+
 
     // Unique users - cumulative count of unique addresses sending messages over time
     const allUsers = new Set();
@@ -195,6 +228,6 @@ async function tokenBalances() {
 
 }
 
-// totalUserActivity()
+totalUserActivity()
 // totalMessageActivity();
-tokenBalances();
+// tokenBalances();
