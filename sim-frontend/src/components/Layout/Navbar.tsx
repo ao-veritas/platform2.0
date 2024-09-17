@@ -70,13 +70,13 @@ export default function Navbar() {
         </div>
       </nav>
       <nav
-        className={`flex md:hidden justify-between items-start px-[30px] pt-[36px] fadeIn fixed w-full z-50 
-        ${isOpen ? "h-[100vh] bg-[#40959d7e] backdrop-blur-[3px]" : "h-[9vh] bg-[#40959d00] backdrop-blur-[9px]"}`}
+        className={`flex md:hidden justify-between items-start px-[30px] py-[36px] fadeIn fixed w-full z-50 
+        ${isOpen ? "h-[100vh] bg-[#40959d7e] backdrop-blur-[3px]" : "h-[11vh] bg-[#40959d00] backdrop-blur-[9px]"}`}
       >
-        <a href="#">
+        <a href="/">
           <img
             alt="Home"
-            src={"https://ykxdc44ycigwbzizbvfquofna2yx2tkn3e6fx5zjltzbjfpbeqcq.arweave.net/wq4xc5gSDWDlGQ1LCjitBrF9TU3ZPFv3KVzyFJXhJAU/logo.svg"}
+            src={"/logos/LogoDarkMode.svg"}
             className="h-[30px] w-[90px]"
           />
         </a>
@@ -123,6 +123,13 @@ export default function Navbar() {
               href="/faucet"
             >
               Faucet
+            </a>{" "}
+            <a
+              className={`hover:text-[#40959D] hover:underline underline-offset-[3px]
+        ${path[1] == "dashboard" ? `${brandSecondaryText} underline` : "text-[#ffffff]"}`}
+              href="/dashboard"
+            >
+              Analysis Dashboard
             </a>{" "}
           </div>
         </div>

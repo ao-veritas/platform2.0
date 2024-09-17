@@ -316,7 +316,7 @@ export const projects:ProjectType[] = [
     {
         name: "Pixel Gaming",
         processID:"processID for Pixel Gaming",
-        logoImageLink:"",
+        logoImageLink:"https://drive.google.com/file/d/172Owr-YwsgGZREo3q6tLiNdeE6Xm0hpA/view?usp=sharing",
         bannerLink:"",
         links: {
             website: "https://www.pixelgaming.us/",

@@ -27,11 +27,12 @@ const User = () => {
         <Navbar/>
         <main className={`${brandDarkBg} min-h-[100vh] w-full text-[#ffffff] flex flex-col justify-start items-center gap-6 `}>
           <div className='flex flex-col justify-start gap-3 w-full'>
-            <div className='w-full flex flex-col pt-[90px]'>
-            <div className="flex gap-20 w-full bg-[#0E9C9C]  px-20 py-6">
+            <div className='w-full flex flex-col md:pt-[90px] pt-[75px]'>
+            <div className="md:flex hidden gap-20 w-full bg-[#0E9C9C] px-20 py-6">
               <TaoEthBalance/> 
               <TaoEthStaked/>
             </div>
+            <div className='block md:hidden gap-20 w-full bg-[#0E9C9C] px-20 py-6 text-center font-bold'>USE A BROWSER AND CONNECT WALLET</div>
             <span className='py-3 bg-[#0e9c9ca3] w-full'></span>
             <span className='py-3 bg-[#0e9c9c3e] w-full'></span>
             <span className='py-3 bg-[#0e9c9c24] w-full'></span></div>

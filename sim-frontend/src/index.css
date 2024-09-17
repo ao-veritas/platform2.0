@@ -12,11 +12,12 @@
     transition: all 0.9s;
 }
 /* ANIMS */
+@media screen and (min-width: 768px) {
 .fadeInScroll {
     animation: fade-in-scroll linear;
     animation-timeline: view();
   }
-  
+}  
   @keyframes fade-in-scroll {
     0% {
       opacity: 0;
