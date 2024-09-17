@@ -182,11 +182,16 @@ async function tokenBalances() {
     // object of balances 
     const balancesObj = JSON.parse(balances); // key is the address, value is the string balance
     // convert the string balance to a number and sort by balance descending
-    const balancesNum = Object.fromEntries(Object.entries(balancesObj).map(([address, balance]) => [address, parseInt(balance)]));
+    const balancesNum = Object.fromEntries(Object.entries(balancesObj)
+    .filter(([address, balance]) => balance !== "0")
+    .map(([address, balance]) => [address, parseInt(balance)]));
     // sort by balance descending
     const sortedBalances = Object.fromEntries(Object.entries(balancesNum).sort((a, b) => b[1] - a[1]));
+
+    // make into an array of objects with address and quantity
+    const balancesArray = Object.entries(sortedBalances).map(([address, quantity]) => ({ address, quantity }));
     // write to file
-    fs.writeFileSync('tokenBalances.json', JSON.stringify(sortedBalances, null, 2));
+    fs.writeFileSync('tokenBalances.json', JSON.stringify(balancesArray, null, 2));
 
 }
 
