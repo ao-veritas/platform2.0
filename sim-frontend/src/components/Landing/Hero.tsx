@@ -1,6 +1,6 @@
 
+import { Link } from "react-router-dom";
 import { BackgroundBeams } from "../ui/background-beams";
-import { HeroCover } from "../ui/coverHero";
 
 const Hero = () => {
   return (
@@ -31,12 +31,12 @@ const Hero = () => {
         </div>
       </div>
       <div className="flex flex-row gap-6 fadeIn pt-9">
-        <a href="/register">
+        <Link to="/register">
           <button className="hover:bg-[#40959d36] hover:tracking-wider rounded-[9px] md:w-[180px] w-[120px] md:text-[16.5px] text-[12px] py-[9px] border-[1px] border-[#40959D]">Add your project</button>
-        </a>
-        <a href="https://github.com/fundars/platform2.0">
+        </Link>
+        <Link to="https://github.com/fundars/platform2.0" target="_blank">
           <button className="hover:bg-[#40959ddf] hover:tracking-wider rounded-[9px] md:w-[180px] w-[120px] md:text-[16.5px] text-[12px] py-[9px] bg-[#40959D]">Explore</button>
-        </a>
+        </Link>
       </div>
     </section>
     <BackgroundBeams/>
