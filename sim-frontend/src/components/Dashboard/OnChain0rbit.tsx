@@ -1,32 +1,10 @@
+import { Area, AreaChart, Bar, BarChart, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
+import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  Radar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Cell,
-  LineChart,
-  Line,
-  TooltipProps,
-} from "recharts";
-import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
-import { messageActivity, messageDistribution, tokenBalances, uniqueUsersData, userMetrics } from "./0rbitData";
 import { format } from "date-fns";
-import { TokenBalancesPieChart } from "./TokenBalances";
 import { useMemo } from "react";
+import { messageActivity, messageDistribution, tokenBalances, uniqueUsersData, userMetrics } from "./0rbitData";
 // import { ValueType } from "framer-motion";
 
 const truncateAddress = (address: string) => {
@@ -160,7 +138,7 @@ const OnChain0rbit = () => {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie nameKey="address" data={processedTokenBalances} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#0E9C9C" dataKey="quantity">
-                {processedTokenBalances.map((value, index) => (
+                {processedTokenBalances.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -169,8 +147,8 @@ const OnChain0rbit = () => {
                 layout="vertical"
                 align="right"
                 verticalAlign="middle"
-                formatter={(value, entry, index) => {
-                  const { payload } = entry;
+                formatter={(_, entry) => {
+                  const { payload } = entry as unknown as { payload: { address: string; quantity: number } };
                   return (
                     <span className="flex items-center justify-between w-full">
                       <span className="font-medium">{truncateAddress(payload.address)}</span>
@@ -271,7 +249,7 @@ const OnChain0rbit = () => {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={messageDistribution} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#0E9C9C" dataKey="count">
-                {messageDistribution.map((value, index) => (
+                {messageDistribution.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
