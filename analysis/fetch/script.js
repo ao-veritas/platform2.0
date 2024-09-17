@@ -2,21 +2,37 @@ import { OrbitDataQuery } from "../fetch/queries/0rbit.js";
 import {parseGraphqlResponse} from "../fetch/utils/parseGraphqlResponse.js"
 import fs from "fs";
 import axios from 'axios';
+import { dryrun } from "@permaweb/aoconnect/node";
+
+const tagActionKey = "X-Action";
+const actions = ["Post-Real-Data", "Get-Real-Data"];
+const userIdKey = "Sender";
+const projectID = "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ";
+const tokenId = "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc"
 
 async function getData() {
-    const allData = [];
-    let cursor = null;
+    let allData = [];
+    const fileName = "postOrbit.json";
+    try {
+        const fileContent = fs.readFileSync(fileName, 'utf8');
+        allData = JSON.parse(fileContent);
+        console.log(`Loaded ${allData.length} records from ${fileName}`);
+    } catch (error) {
+        console.error(`Error reading ${fileName}:`, error.message);
+        console.log('Starting with an empty array');
+    }
+    let cursor = null
     while (true) {
-        const query = OrbitDataQuery("Get-Real-Data", cursor);
+        const query = OrbitDataQuery("Post-Real-Data", cursor);
         const response =  await axios.post('https://arweave-search.goldsky.com/graphql', query, {
             headers: { 'Content-Type': 'application/json' }
         });
         // sleep for 1 second
         await new Promise(resolve => setTimeout(resolve, 1000));
         const parsedData = parseGraphqlResponse(response.data)
-        console.log('got', parsedData.data.length, 'records. Cursor:', cursor)
+        console.log('go', parsedData.data.length, 'records. Cursor:', cursor)
         allData.push(...parsedData.data);
-        fs.writeFileSync('data.json', JSON.stringify(allData, null, 2));
+        fs.writeFileSync(fileName, JSON.stringify(allData, null, 2));
 
         cursor = parsedData.nextPageCursor;
         if (!cursor || parsedData.data.length == 0) {
@@ -26,4 +42,154 @@ async function getData() {
     
 }
 
-getData();
+function combineData() {
+    const postData = JSON.parse(fs.readFileSync('postOrbit.json', 'utf8'));
+    const getData = JSON.parse(fs.readFileSync('getOrbit.json', 'utf8'));
+
+    const combinedData = postData.concat(getData);
+
+    // sort by timestamp ascending
+    combinedData.sort((a, b) => a.timestamp - b.timestamp);
+    fs.writeFileSync('fullOrbit.json', JSON.stringify(combinedData, null, 2));
+}
+
+
+
+// Total Message activity - y axis is the number of messages. X axis is time. Line graph for messages sent each day
+function totalMessageActivity() {
+    
+    const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
+    
+    const messageActivity = {};
+
+    data.forEach(item => {
+        const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
+        const action = item.tags[tagActionKey];
+        
+        if (actions.includes(action)) {
+            if (!messageActivity[date]) {
+                messageActivity[date] = { total: 0 };
+                actions.forEach(a => messageActivity[date][a] = 0);
+            }
+            messageActivity[date][action]++;
+            messageActivity[date].total++;
+        }
+    });
+
+    // Convert messageActivity object to an array of { date, total, "Post-Real-Data", "Get-Real-Data" }
+    const result = Object.entries(messageActivity).map(([date, counts]) => ({
+        date,
+        ...counts
+    }));
+
+    // Sort the result array by date in ascending order
+    result.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // calculate the Message Distribution
+    const totalMessages = result.reduce((sum, item) => sum + item.total, 0);
+    result.forEach(item => {
+        item.distribution = {};
+        actions.forEach(action => {
+            item.distribution[action] = item[action] / totalMessages;
+        });
+    });
+
+    // write to file
+    fs.writeFileSync('totalMessageActivity.json', JSON.stringify(result, null, 2));
+
+    // Calculate the total message distribution for each action
+    const totalCounts = actions.reduce((acc, action) => {
+        acc.push({
+            name: action,
+            count: result.reduce((sum, item) => sum + item[action], 0)
+        });
+        return acc;
+    }, []);
+
+    // write to file
+    fs.writeFileSync('totalMessageDistribution.json', JSON.stringify(totalCounts, null, 2));
+    
+    return result;
+    
+}
+
+// Total users - how many unique users sent a message each day. Y axis addresses that sent a message. X axis is time
+function totalUserActivity() {
+    const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
+    const userActivity = {};
+
+    data.forEach(item => {
+        const user = item.tags[userIdKey];
+        const action = item.tags[tagActionKey];
+        const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
+
+        if (!userActivity[date]) {
+            userActivity[date] = { total: new Set(), [action]: new Set() };
+        } else if (!userActivity[date][action]) {
+            userActivity[date][action] = new Set();
+        }
+
+        userActivity[date][action].add(user);
+        userActivity[date].total.add(user);
+    });
+
+    // Convert userActivity object to an array of { date, total, "Post-Real-Data", "Get-Real-Data" }
+    const result = Object.entries(userActivity).map(([date, counts]) => {
+        const entry = { date, total: counts.total.size };
+        actions.forEach(action => {
+            entry[action] = counts[action]?.size || 0;
+        });
+        return entry;
+    });
+
+    // Sort the result array by date in ascending order
+    result.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // write to file
+    fs.writeFileSync('totalUserActivity.json', JSON.stringify(result, null, 2));
+
+    // Unique users - cumulative count of unique addresses sending messages over time
+    const allUsers = new Set();
+    const uniqueUsers = data.reduce((acc, item) => {
+        const user = item.tags[userIdKey];
+        const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
+        allUsers.add(user);
+        acc[date] = allUsers.size;
+        return acc;
+    }, {});
+
+    // Convert to array of objects and sort by date
+    const uniqueUsersArray = Object.entries(uniqueUsers).map(([date, count]) => ({ date, count }));
+    uniqueUsersArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+
+    // write to file
+    fs.writeFileSync('uniqueUsers.json', JSON.stringify(uniqueUsersArray, null, 2));
+
+    return result;
+    
+}
+
+async function tokenBalances() {
+    // call dry run on process
+    const result = await dryrun({
+        process: tokenId,
+        tags: [
+          { name: "Action", value: "Balances" },
+        ],
+      });
+    const balances = result.Messages[0].Data
+    // object of balances 
+    const balancesObj = JSON.parse(balances); // key is the address, value is the string balance
+    // convert the string balance to a number and sort by balance descending
+    const balancesNum = Object.fromEntries(Object.entries(balancesObj).map(([address, balance]) => [address, parseInt(balance)]));
+    // sort by balance descending
+    const sortedBalances = Object.fromEntries(Object.entries(balancesNum).sort((a, b) => b[1] - a[1]));
+    // write to file
+    fs.writeFileSync('tokenBalances.json', JSON.stringify(sortedBalances, null, 2));
+
+}
+
+// totalUserActivity()
+// totalMessageActivity();
+tokenBalances();

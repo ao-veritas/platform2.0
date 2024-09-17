@@ -61,8 +61,10 @@
 export function parseGraphqlResponse(responseData) {
     const transactions = responseData.data.transactions
 
+    // filter out nodes where block is null
+    const transactionsWithBlock = transactions.edges.filter(edge => edge.node.block !== null);
 
-    const nodeData = transactions.edges.map(edge => {
+    const nodeData = transactionsWithBlock.map(edge => {
         const node = edge.node;
         const tags = node.tags.reduce((acc, tag) => {
             acc[tag.name] = tag.value;
@@ -85,7 +87,12 @@ export function parseGraphqlResponse(responseData) {
         };
     });
 
-    const lastCursor = transactions.edges[transactions.edges.length - 1].cursor;
+    const lastCursor = transactionsWithBlock[transactionsWithBlock.length - 1].cursor;
 
-  return {data: nodeData, nextPageCursor: lastCursor};
+    if (transactionsWithBlock.length != transactions.edges.length) {
+        console.log("last cursor", lastCursor, "transactionsWithBlock.length", transactionsWithBlock.length, "transactions.edges.length", transactions.edges.length)
+    }
+
+
+  return {data: nodeData, nextPageCursor: transactionsWithBlock.length == transactions.edges.length ? lastCursor : null };
 }
