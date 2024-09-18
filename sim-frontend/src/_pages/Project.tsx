@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { brandDarkBg, brandDarkBorder, brandSecondaryBg, brandSecondaryText } from "../_utils/colors"
 import { Footer, Navbar,  } from "../components"
-
 import { projects } from "@/_utils/projects";
 import { ProjectType } from "@/_utils/types";
 

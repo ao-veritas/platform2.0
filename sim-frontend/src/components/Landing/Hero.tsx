@@ -1,6 +1,5 @@
 
 import { BackgroundBeams } from "../ui/background-beams";
-import { HeroCover } from "../ui/coverHero";
 
 const Hero = () => {
   return (
