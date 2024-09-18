@@ -7,7 +7,7 @@ import { humanizeDuration } from "../_utils/helpers";
 import stake from "../_utils/stake";
 import Loader from "../components/Loader";
 import { getAllTransactions } from "../_utils/info";
-
+import { Link } from "react-router-dom";
 
 
 const Saturn = () => {
@@ -178,12 +178,12 @@ const Saturn = () => {
                         </div>
                     </div>
                     <div className="flex flex-row gap-[24px] items-center justify-start">
-                        {project.links.website? <a href={project.links.website} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/website.png" className="w-[36px] h-[36px] " alt="" /></a>:""}
-                        {project.links.docs? <a href={project.links.docs} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/docs.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
-                        {project.links.github? <a href={project.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
-                        {project.links.discord? <a href={project.links.discord} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/discord.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
-                        {project.links.telegram? <a href={project.links.telegram} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/telegram.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
-                        {project.links.twitter? <a href={project.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[36px] h-[36px] " alt="" /></a>:""}
+                        {project.links.website? <Link to={project.links.website} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/website.png" className="w-[36px] h-[36px] " alt="" /></Link>:""}
+                        {project.links.docs? <Link to={project.links.docs} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/docs.svg" className="w-[36px] h-[36px] " alt="" /></Link>:""}
+                        {project.links.github? <Link to={project.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg" className="w-[36px] h-[36px] " alt="" /></Link>:""}
+                        {project.links.discord? <Link to={project.links.discord} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/discord.svg" className="w-[36px] h-[36px] " alt="" /></Link>:""}
+                        {project.links.telegram? <Link to={project.links.telegram} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/telegram.svg" className="w-[36px] h-[36px] " alt="" /></Link>:""}
+                        {project.links.twitter? <Link to={project.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[36px] h-[36px] " alt="" /></Link>:""}
                     </div>
                 </section>
                 <section className="flex flex-col gap-3">
@@ -212,9 +212,9 @@ const Saturn = () => {
                         <h6>{member.officialName} {member.pseudoName?<span>{"("}{member.pseudoName}{")"}</span>:""}</h6>
                         <h6>{member.role}</h6>
                         <div className="flex flex-row gap-[6px]">
-                            {member.links.github?<a href={member.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg"  className="w-[27px] h-[27px]" alt="" /></a>:""}
-                            {member.links.twitter?<a href={member.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[27px] h-[27px]"  alt="" /></a>:""}
-                            {member.links.dribble?<a href={member.links.dribble} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/dribble.svg" className="w-[27px] h-[27px]"  alt="" /></a>:""}
+                            {member.links.github?<Link to={member.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg"  className="w-[27px] h-[27px]" alt="" /></Link>:""}
+                            {member.links.twitter?<Link to={member.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[27px] h-[27px]"  alt="" /></Link>:""}
+                            {member.links.dribble?<Link to={member.links.dribble} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/dribble.svg" className="w-[27px] h-[27px]"  alt="" /></Link>:""}
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@ const Saturn = () => {
                             <h4>{usecase.name}</h4>
                             <div>
                             <p>{usecase.info}</p>
-                            <a href={usecase.liveLink}>Try It!</a>
+                            <Link to={usecase.liveLink}>Try It!</Link>
                             </div>
                         </div>
                     }):""}

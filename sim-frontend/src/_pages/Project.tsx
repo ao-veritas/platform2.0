@@ -3,6 +3,7 @@ import { brandDarkBg, brandDarkBorder, brandSecondaryBg, brandSecondaryText } fr
 import { Footer, Navbar,  } from "../components"
 import { projects } from "@/_utils/projects";
 import { ProjectType } from "@/_utils/types";
+import { Link } from "react-router-dom";
 
 
 const Project = ({pid}:any) => {
@@ -17,7 +18,7 @@ const Project = ({pid}:any) => {
   return (
     <>
         <Navbar/>
-        {currentProject ?<main className={`${brandDarkBg} w-[100vw] px-20 pt-[120px] text-[#FCFCFC] font-raleway`}>
+        {currentProject ?<main className={`${brandDarkBg} w-full mb-10 px-20 pt-[120px] text-[#FCFCFC] font-raleway`}>
             <section className="">
                 <img src={currentProject.bannerLink?currentProject.bannerLink:dummyProject.bannerLink} alt="" className="rounded-[9px] max-h-[300px]"/>
                 <div className={`mt-[-45px] border-[3px] border-solid ${brandDarkBorder} rounded-[9px] w-fit`}>
@@ -51,12 +52,12 @@ const Project = ({pid}:any) => {
                         </div>
                     </div>
                     <div className="flex flex-row gap-[24px] items-center justify-start">
-                        {currentProject.links.website ? <a href={currentProject.links.website} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/website.png" className="w-[36px] h-[36px]" alt="" /></a> : ""}
-                        {currentProject.links.docs ? <a href={currentProject.links.docs} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/docs.svg" className="w-[36px] h-[36px]" alt="" /></a> : ""}
-                        {currentProject.links.github ? <a href={currentProject.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg" className="w-[36px] h-[36px]" alt="" /></a> : ""}
-                        {currentProject.links.discord ? <a href={currentProject.links.discord} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/discord.svg" className="w-[36px] h-[36px]" alt="" /></a> : ""}
-                        {currentProject.links.telegram ? <a href={currentProject.links.telegram} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/telegram.svg" className="w-[36px] h-[36px]" alt="" /></a> : ""}
-                        {currentProject.links.twitter ? <a href={currentProject.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[36px] h-[36px]" alt="" /></a> : ""}
+                        {currentProject.links.website ? <Link to={currentProject.links.website} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/website.png" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
+                        {currentProject.links.docs ? <Link to={currentProject.links.docs} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/docs.svg" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
+                        {currentProject.links.github ? <Link to={currentProject.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
+                        {currentProject.links.discord ? <Link to={currentProject.links.discord} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/discord.svg" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
+                        {currentProject.links.telegram ? <Link to={currentProject.links.telegram} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/telegram.svg" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
+                        {currentProject.links.twitter ? <Link to={currentProject.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[36px] h-[36px]" alt="" /></Link> : ""}
                     </div>
                 </section>
                 <section className="flex flex-col gap-3">
@@ -85,9 +86,9 @@ const Project = ({pid}:any) => {
                             <h6>{member.officialName ? member.officialName : dummyProject.team[index].officialName} {member.pseudoName ? <span>{"("}{member.pseudoName}{")"}</span> : ""}</h6>
                             <h6>{member.role ? member.role : dummyProject.team[index].role}</h6>
                             <div className="flex flex-row gap-[6px]">
-                                {member.links.github ? <a href={member.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg"  className="w-[27px] h-[27px]" alt="" /></a> : ""}
-                                {member.links.twitter ? <a href={member.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[27px] h-[27px]"  alt="" /></a> : ""}
-                                {member.links.dribble ? <a href={member.links.dribble} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/dribble.svg" className="w-[27px] h-[27px]"  alt="" /></a> : ""}
+                                {member.links.github ? <Link to={member.links.github} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/github.svg"  className="w-[27px] h-[27px]" alt="" /></Link> : ""}
+                                {member.links.twitter ? <Link to={member.links.twitter} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/twitter.svg" className="w-[27px] h-[27px]"  alt="" /></Link> : ""}
+                                {member.links.dribble ? <Link to={member.links.dribble} target="_blank" className="bg-[#eeeeee] hover:opacity-30 cursor-pointer rounded-full p-[3px]"><img src="/icons/dribble.svg" className="w-[27px] h-[27px]"  alt="" /></Link> : ""}
                             </div>
                         </div>
                     </div>
@@ -106,7 +107,7 @@ const Project = ({pid}:any) => {
                             <h4>{usecase.name ? usecase.name : dummyProject.useCases[index].name}</h4>
                             <div>
                                 <p>{usecase.info ? usecase.info : dummyProject.useCases[index].info}</p>
-                                <a href={usecase.liveLink ? usecase.liveLink : dummyProject.useCases[index].liveLink}>Try It!</a>
+                                <Link to={usecase.liveLink ? usecase.liveLink : dummyProject.useCases[index].liveLink}>Try It!</Link>
                             </div>
                         </div>
                     }) : ""}

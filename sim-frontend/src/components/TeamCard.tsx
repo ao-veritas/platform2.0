@@ -44,7 +44,7 @@ const TeamCard: React.FC<TeamProps> = ({ pname, github, dribble, twitter, info, 
         {info}
       </h4>
       <div className=" flex flex-row xl:gap-3 gap-[9px] pt-3">
-        <a href={twitter}>
+        <a href={twitter} target="_blank">
           <img
             src={"https://ykxdc44ycigwbzizbvfquofna2yx2tkn3e6fx5zjltzbjfpbeqcq.arweave.net/wq4xc5gSDWDlGQ1LCjitBrF9TU3ZPFv3KVzyFJXhJAU/icons/twitterTeam.svg"}
             alt="x"
@@ -56,7 +56,7 @@ const TeamCard: React.FC<TeamProps> = ({ pname, github, dribble, twitter, info, 
           />
         </a>
         {github && (
-          <a href={github}>
+          <a href={github} target="_blank">
             <img
               src={"https://ykxdc44ycigwbzizbvfquofna2yx2tkn3e6fx5zjltzbjfpbeqcq.arweave.net/wq4xc5gSDWDlGQ1LCjitBrF9TU3ZPFv3KVzyFJXhJAU/icons/githubTeam.svg"}
               alt="github"
@@ -68,7 +68,7 @@ const TeamCard: React.FC<TeamProps> = ({ pname, github, dribble, twitter, info, 
           </a>
         )}
         {dribble && (
-          <a href={dribble}>
+          <a href={dribble} target="_blank">
             {/* <FaDribbble
               className={` hover:opacity-75 hover:scale-90 hover:cursor-pointer 
                 xl:w-[15px] xl:h-[15px]
