@@ -329,11 +329,11 @@ const Saturn = () => {
                   </div>
                   <button
                     disabled={!rewardsSent}
-                    onClick={() => (window.location.href = "/user")}
-                    className={`${!rewardsSent ? "bg-gray-400" : "bg-[#205156]"} text-[#f1f1f1] py-[6px] px-[18px] rounded m-4`}
+                    // onClick={() => (window.location.href = "/user")}
+                    className={`${!rewardsSent ? "bg-gray-400" : "bg-[#205156]"} text-[#f1f1f1]  rounded m-4`}
                   >
                     {rewardsSent ? (
-                      "See Your Profile"
+                      <Link to="/user" className="py-[6px] px-[18px]">"See Your Profile"</Link>
                     ) : (
                       <div className="flex gap-4">
                         <Loader />
