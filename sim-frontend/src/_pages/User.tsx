@@ -1,16 +1,14 @@
 import { projects } from "@/_utils/projects";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { ConnectButton } from "arweave-wallet-kit";
+import { ConnectButton, useConnection } from "arweave-wallet-kit";
 import { brandDarkBg } from "../_utils/colors";
 import { Footer, TaoEthBalance, TaoEthStaked } from "../components";
 import ProjectCard from "../components/Landing/ProjectCard";
 import Navbar from "../components/Layout/Navbar";
-import { connected } from '@/store/atoms/connected'
-import { useRecoilValue } from "recoil";
 
 const User = () => {
-  const isConnected = useRecoilValue(connected)
-  if (!isConnected)
+  const {connected} = useConnection();
+  if (!connected)
     return (
       <>
         <Navbar />

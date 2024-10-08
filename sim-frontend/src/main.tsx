@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { ArweaveWalletKit } from 'arweave-wallet-kit'
 import AppRouter from './AppRouter.tsx'
-import { RecoilRoot } from 'recoil'
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RecoilRoot>
+
      <ArweaveWalletKit
       config={{
         permissions: ["SIGN_TRANSACTION", "ACCESS_ADDRESS"],
@@ -21,6 +21,6 @@ createRoot(document.getElementById('root')!).render(
     >
         <AppRouter />
     </ArweaveWalletKit>
-    </RecoilRoot>
+
   </StrictMode>,
 )
