@@ -8,7 +8,13 @@ const TaoEthStaked = () => {
       callGetTaoStakes();
     }, [])
     const callGetTaoStakes = async() => {
-      setTaoEthStaked(await getTaoEthStake());
+      try {
+        setTaoEthStaked(await getTaoEthStake());
+
+      } catch (error) {
+        setTaoEthStaked(0);
+        console.log(error)
+      }
     }
   return (
     <div className="flex flex-col justify-start items-start">
