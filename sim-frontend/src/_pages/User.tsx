@@ -1,41 +1,41 @@
 import { projects } from "@/_utils/projects";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { ConnectButton, useActiveAddress } from "arweave-wallet-kit";
+import { ConnectButton, useConnection } from "arweave-wallet-kit";
 import { brandDarkBg } from "../_utils/colors";
 import { Footer, TaoEthBalance, TaoEthStaked } from "../components";
 import ProjectCard from "../components/Landing/ProjectCard";
 import Navbar from "../components/Layout/Navbar";
 
 const User = () => {
-  const address = useActiveAddress();
-  if (!address)
+  const {connected} = useConnection();
+  if (!connected)
     return (
       <>
         <Navbar />
-        <main className={`${brandDarkBg} min-h-[100vh] w-[100vw] text-[#ffffff] flex flex-col justify-start items-center gap-6 pt-[120px]`}>
+        <main className={`${brandDarkBg} min-h-[100vh] w-full text-[#ffffff] flex flex-col justify-start items-center gap-6 pt-[120px]`}>
           <section className="flex flex-col rounded-[9px] bg-[#1F1E1E] px-[30px] py-[15px] items-start gap-6">
             <h3 className="font-medium text-[21px]">Please connect Wallet to view your Stakes:</h3>
             <ConnectButton accent="rgb(14, 156, 156)" />
           </section>
         </main>
-        <Footer />
-      </>
-    );
-  return (
-    <>
-      <Navbar />
-      <main className={`${brandDarkBg} min-h-[100vh] w-full text-[#ffffff] flex flex-col justify-start items-center gap-6 `}>
-        <div className="flex flex-col justify-start gap-3 w-full">
-          <div className="w-full flex flex-col pt-[90px]">
-            <div className="flex gap-20 w-full bg-[#0E9C9C]  px-20 py-6">
-              <TaoEthBalance />
-              <TaoEthStaked />
+        <Footer/>
+    </>
+      ); 
+    return (
+      <>
+        <Navbar/>
+        <main className={`${brandDarkBg} min-h-[100vh] w-full text-[#ffffff] flex flex-col justify-start items-center gap-6 mb-20`}>
+          <div className='flex flex-col justify-start gap-3 w-full'>
+            <div className='w-full flex flex-col md:pt-[90px] pt-[75px]'>
+            <div className="md:flex hidden gap-20 w-full bg-[#0E9C9C] px-20 py-6">
+              <TaoEthBalance/> 
+              <TaoEthStaked/>
             </div>
-            <span className="py-3 bg-[#0e9c9ca3] w-full"></span>
-            <span className="py-3 bg-[#0e9c9c3e] w-full"></span>
-            <span className="py-3 bg-[#0e9c9c24] w-full"></span>
-          </div>
-          <div className="grid md:grid-cols-3 ">
+            <div className='block md:hidden gap-20 w-full bg-[#0E9C9C] px-20 py-6 text-center font-bold'>USE A BROWSER AND CONNECT WALLET</div>
+            <span className='py-3 bg-[#0e9c9ca3] w-full'></span>
+            <span className='py-3 bg-[#0e9c9c3e] w-full'></span>
+            <span className='py-3 bg-[#0e9c9c24] w-full'></span></div>
+            <div className='grid md:grid-cols-3 '>
             {projects.map((project) => {
               return <ProjectCard project={project} />;
             })}

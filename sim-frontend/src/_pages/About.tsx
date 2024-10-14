@@ -7,7 +7,7 @@ export default function About() {
     <>
      <Navbar/>
     <main
-      className={`${brandDarkBg} flex flex-col items-center md:justify-center justify-between text-[#f1f1f1] pt-[0px] min-h-[93vh]`}>
+      className={`${brandDarkBg} flex flex-col items-center md:justify-start justify-between text-[#f1f1f1] pt-[120px] min-h-[93vh]`}>
       <h1
         className="uppercase tracking-wider font-bold leading-[51px]
       xl:text-[45px] text-[36px] text-[#4FD2DE]"
@@ -22,7 +22,7 @@ export default function About() {
       </h3>
       <div
         className="
-        z-50 
+        z-30 
           xl:gap-6 
           md:gap-[18px] flex md:flex-row
           flex-col gap-3

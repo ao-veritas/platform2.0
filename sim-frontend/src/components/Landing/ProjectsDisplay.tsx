@@ -4,9 +4,9 @@ import { projects } from "@/_utils/projects";
 
 const ProjectsDisplay = () => {
   return (
-    <section id="projects" className="lg:px-20 px-6 flex flex-col items-center justify-start gap-9 md:fadeInScroll">
+    <section id="projects" className="lg:px-20 px-6 flex flex-col items-center justify-start md:gap-9 md:fadeInScroll mb-12">
       <div className="flex flex-row justify-center items-center w-full ">
-        <h3 className="md:text-[30px] text-[24px] text-[#40959D] font-[Rale-SemiBold] text-center">Featured Projects</h3>
+        <h3 className="md:text-[39px] text-[24px] text-[#40959D] font-[Rale-Medium] text-center mb-[-15px]">Featured Projects</h3>
         {/* <div className="flex flex-row gap-[12px] justify-end items-center">
           <input
             type="text"
@@ -18,7 +18,7 @@ const ProjectsDisplay = () => {
           </a>
         </div> */}
       </div>
-      <div className="grid grid-flow-row lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[21px] w-full">
+      <div className="grid grid-flow-row lg:grid-cols-3 md:grid-cols-2 grid-cols-1 md:gap-[21px] gap-[0px] w-full">
         {" "}
         {projects.map((project) => {
           return <ProjectCard project={project} />;

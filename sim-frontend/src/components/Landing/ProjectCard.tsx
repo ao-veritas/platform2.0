@@ -28,15 +28,15 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
       >
     <div
       // to={"/saturn"}
-      className="w-[345px] h-[180px] rounded-[9px] place-self-center
-      flex flex-col gap-[6px] bg-[#00000000] justify-between items-start py-[9px] px-[21px] mb-10"
+      className="md:w-[345px] md:h-[180px] w-[270px] rounded-[9px] place-self-center
+      flex flex-col md:gap-[6px] bg-[#00000000] justify-between items-start md:py-[9px] md:px-[21px] py-[3px] px-[9px] mb-[15px]"
     >
       <div className="flex w-full h-1/2 gap-2">
         <div className="w-1/4 h-16">
           <img src={project?.logoImageLink} className="w-full h-full" />
         </div>
         <div className="flex flex-col w-1/3 gap-1">
-          <div className="font-[Raleway] text-white text-3xl tracking-normal pl-1">{project?.name}</div>
+          <div className="font-[Raleway] text-white md:text-3xl text-xl tracking-normal pl-1">{project?.name}</div>
           <div className="rounded-[6px] flex flex-row py-[3px] bg-[#393939] text-[#f1f1f1] gap-1 items-center">
             <svg width="20" height="20">
               <circle cx="10" cy="10" r="7" />
