@@ -1,10 +1,12 @@
 
 
-export const OrbitActions = ["Create-Dataset"];
+export const ApusActions = ["Create-Dataset"];
 
+// Each compettion pool has its own process. Latest (3rd) pool: ZuZZeU2-JeNRdpBWBWU8p6IcjNXyZ0BFZ4M2Pwoj9vM
+// Users can send "Chat-Question" Messages to chat with different datasets
 
 export function ApusDataQuery(actionTag, cursor) {
-    if (!OrbitActions.includes(actionTag)) {
+    if (!ApusActions.includes(actionTag)) {
         throw new Error(`Invalid Apus action tag: ${actionTag}`);
     }
     const query = {
