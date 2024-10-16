@@ -1,10 +1,12 @@
 
 
-export const Actions = ["Buy", "Claim"];
+export const OutcomeActions = ["Buy", "Claim"];
 
 export const OutcomeToken = "Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY"
 
-export function ApusDataQuery(actionTag, cursor) {
+export const OutcomeProjectProcessId = "Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY"
+
+function OutcomeDataQuery(actionTag, cursor) {
     if (!Actions.includes(actionTag)) {
         throw new Error(`Invalid Apus action tag: ${actionTag}`);
     }
@@ -14,7 +16,7 @@ export function ApusDataQuery(actionTag, cursor) {
     transactions(
         ${cursor ? `after: "${cursor}",` : ''}
         sort: HEIGHT_ASC,
-        recipients:["Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY"]
+        recipients:["${OutcomeProjectProcessId}"]
         first: 200,
         tags: [
             {

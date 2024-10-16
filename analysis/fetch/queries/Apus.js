@@ -4,10 +4,11 @@ export const ApusActions = ["Create-Dataset"];
 
 export const ApusToken = "al1xXXnWnfJD8qyZJvttVGq60z1VPGn4M5y6uCcMBUM"
 
+export const ApusProjectProcessId = "vp4pxoOsilVxdsRqTmLjP86CwwUwtj1RoKeGrFVxIVk"
 // Each compettion pool has its own process. Latest (3rd) pool: ZuZZeU2-JeNRdpBWBWU8p6IcjNXyZ0BFZ4M2Pwoj9vM
 // Users can send "Chat-Question" Messages to chat with different datasets
 
-export function ApusDataQuery(actionTag, cursor) {
+function ApusDataQuery(actionTag, cursor) {
     if (!ApusActions.includes(actionTag)) {
         throw new Error(`Invalid Apus action tag: ${actionTag}`);
     }
@@ -17,7 +18,7 @@ export function ApusDataQuery(actionTag, cursor) {
     transactions(
         ${cursor ? `after: "${cursor}",` : ''}
         sort: HEIGHT_ASC,
-        recipients:["vp4pxoOsilVxdsRqTmLjP86CwwUwtj1RoKeGrFVxIVk"]
+        recipients:["${ApusProjectProcessId}"]
         first: 200,
         tags: [
             {

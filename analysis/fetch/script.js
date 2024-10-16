@@ -1,5 +1,7 @@
-import { OrbitDataQuery } from "../fetch/queries/0rbit.js";
 import { dataQuery } from "./queries/dataQuery.js";
+import { OrbitProjectId, OrbitToken, OrbitActions } from "./queries/0rbit.js";
+import { ApusProjectProcessId, ApusToken, ApusActions } from "./queries/Apus.js";
+import { OutcomeProjectProcessId, OutcomeToken, OutcomeActions } from "./queries/Outcome.js";
 import {parseGraphqlResponse} from "../fetch/utils/parseGraphqlResponse.js"
 import fs from "fs";
 import axios from 'axios';
@@ -7,63 +9,159 @@ import { dryrun } from "@permaweb/aoconnect/node";
 
 // const tagActionKey = "X-Action";
 // const actions = ["Post-Real-Data", "Get-Real-Data"];
-// const userIdKey = "Sender";
+// const userIdKey = "tags.Sender";
 // const projectID = "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ";
 // const tokenId = "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc"
 
-export async function getData(projectId, actionTag) {
-    let allData = [];
-    const fileName = "postOrbit.json";
+// Orbit
+// const tagActionKey = "X-Action";
+// const actions = ["Post-Real-Data", "Get-Real-Data"];
+// const userIdKey = "tags.Sender";
+// const projectId = OrbitProjectId
+// const tokenId = OrbitToken
+
+// Apus
+// const tagActionKey = "Action";
+// const actions = ApusActions;
+// const userIdKey = "owner";
+// const projectId = ApusProjectProcessId
+// const tokenId = ApusToken
+
+// Outcome
+const tagActionKey = "Action";
+const actions = ["Claim", "Buy"];
+const cursors = {
+    "Buy": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDQyNTU3LCItQmZJUEtkTVZ2U2RrZl9ldmtRSVNQVHJGWTdPaFlZUEVRVl83QnczQjM0Il0sImluZGV4IjoxNDA5OX0=",
+    "Claim": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDYzMjI2LCJRTFYxdnZJS0hLMk1aSi1PODE1RWw2RWNqZmJBUDFYajJOZ3NQN2U2ckZBIl0sImluZGV4IjoxNTY5OX0="
+}
+const userIdKey = "owner";
+const projectId = OutcomeProjectProcessId
+const tokenId = OutcomeToken
+const startingDate = "2024-06-01"
+
+const dataDir = `data_files/${projectId}`
+const rawDataDir = `data_files/raw_data/${projectId}`;
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
+if (!fs.existsSync(rawDataDir)) {
+    fs.mkdirSync(rawDataDir, { recursive: true });
+}
+
+// Get all the Raw Data
+async function getRawData() {
+for (const action of actions) {
+        await getData(projectId, {name: tagActionKey, value: action}, cursors[action])
+    }
+}
+// await getRawData()
+
+function getNestedValue(obj, path) {
+    if (typeof path === 'string') {
+        return path.split('.').reduce((current, key) => {
+            return current && current[key] !== undefined ? current[key] : undefined;
+        }, obj);
+    } else if (Array.isArray(path)) {
+        return path.reduce((current, key) => {
+            return current && current[key] !== undefined ? current[key] : undefined;
+        }, obj);
+    } else {
+        return obj[path];
+    }
+}
+
+export async function getData(projectId, actionTag, startingOptionalCursor) {
+    let allData = {}; // id: value to easily avoid duplicates
+    const dir = `data_files/raw_data/${projectId}`;
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    const fileName = `${dir}/${actionTag.value}.json`;
     try {
         const fileContent = fs.readFileSync(fileName, 'utf8');
         allData = JSON.parse(fileContent);
-        console.log(`Loaded ${allData.length} records from ${fileName}`);
+        console.log(`Loaded ${Object.keys(allData).length} records from ${fileName}`);
     } catch (error) {
         console.error(`Error reading ${fileName}:`, error.message);
         console.log('Starting with an empty array');
     }
-    let cursor = null
+
+    let cursor = startingOptionalCursor || null
+
     while (true) {
         const query = dataQuery(actionTag, cursor, projectId);
-        const response =  await axios.post('https://arweave-search.goldsky.com/graphql', query, {
-            headers: { 'Content-Type': 'application/json' }
-        });
-        // sleep for 1 second
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const parsedData = parseGraphqlResponse(response.data)
-        console.log('go', parsedData.data.length, 'records. Cursor:', cursor)
-        allData.push(...parsedData.data);
+        try {
+            const response =  await axios.post('https://arweave-search.goldsky.com/graphql', query, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+             // sleep for 1 second
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const parsedData = parseGraphqlResponse(response.data)
+            cursor = parsedData.nextPageCursor;
+            console.log('got', parsedData.data.length, 'records. Cursor:', cursor ? cursor : 'null')
+            const lastDate = new Date(parsedData.data[parsedData.data.length-1].timestamp*1000).toISOString().split('T')[0]
+            console.log("got data till", lastDate)
+            parsedData.data.forEach(item => {
+                const itemDate = new Date(item.timestamp*1000).toISOString().split('T')[0]
+                if (itemDate < startingDate) {
+                    return;
+                }
+                allData[item.id] = item;
+            });
+            if (lastDate < startingDate) {
+                break;
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+            console.log('Retrying...');
+            console.log("query", query.query)
+            console.log(error.response?.data)
+            throw new Error('Error fetching data');
+        }
+       
         fs.writeFileSync(fileName, JSON.stringify(allData, null, 2));
-
-        cursor = parsedData.nextPageCursor;
-        if (!cursor || parsedData.data.length == 0) {
+        if (!cursor) {
             break;
         }
     }
     
 }
 
-export function combineData() {
-    const postData = JSON.parse(fs.readFileSync('postOrbit.json', 'utf8'));
-    const getData = JSON.parse(fs.readFileSync('getOrbit.json', 'utf8'));
 
-    const combinedData = postData.concat(getData);
+
+
+export function combineData() {
+    // combine all files in the directory
+    const files = fs.readdirSync(rawDataDir);
+    const combinedData = [];
+    files.forEach(file => {
+        const data = JSON.parse(fs.readFileSync(`${rawDataDir}/${file}`, 'utf8'));
+        const dataValues = Object.values(data);
+        combinedData.push(...dataValues);
+    });
+    // const postData = JSON.parse(fs.readFileSync(`${dir}/Post-Real-Data.json`, 'utf8'));
+    // const getData = JSON.parse(fs.readFileSync(`${dir}/Get-Real-Data.json`, 'utf8'));
+
+    // const combinedData = postData.concat(getData);
 
     // sort by timestamp ascending
     combinedData.sort((a, b) => a.timestamp - b.timestamp);
-    fs.writeFileSync('fullOrbit.json', JSON.stringify(combinedData, null, 2));
+   
+    fs.writeFileSync(dataDir+'/fullData.json', JSON.stringify(combinedData, null, 2));
+    return combinedData
 }
 
 
 
+
 // Total Message activity - y axis is the number of messages. X axis is time. Line graph for messages sent each day
-export function totalMessageActivity({tagActionKey, actions}) {
+export function getMessageActivityData(fullData) {
     
-    const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
+    // const fullData = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
     
     const messageActivity = {};
 
-    data.forEach(item => {
+    fullData.forEach(item => {
         const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
         const action = item.tags[tagActionKey];
         
@@ -96,7 +194,7 @@ export function totalMessageActivity({tagActionKey, actions}) {
     });
 
     // write to file
-    fs.writeFileSync('totalMessageActivity.json', JSON.stringify(result, null, 2));
+    fs.writeFileSync(dataDir+'/totalMessageActivity.json', JSON.stringify(result, null, 2));
 
     // Calculate the total message distribution for each action
     const totalCounts = actions.reduce((acc, action) => {
@@ -108,19 +206,20 @@ export function totalMessageActivity({tagActionKey, actions}) {
     }, []);
 
     // write to file
-    fs.writeFileSync('totalMessageDistribution.json', JSON.stringify(totalCounts, null, 2));
+    fs.writeFileSync(dataDir+'/totalMessageDistribution.json', JSON.stringify(totalCounts, null, 2));
     
-    return result;
+    return {totalMessageActivity: result, totalMessageDistribution: totalCounts};
     
 }
 
 // Total users - how many unique users sent a message each day. Y axis addresses that sent a message. X axis is time
-export function totalUserActivity({actions, userIdKey}) {
-    const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
+export function getUserActivityData(fullData) {
+    // const fullData = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
     const userActivity = {};
 
-    data.forEach(item => {
-        const user = item.tags[userIdKey];
+    fullData.forEach(item => {
+        // userId key can be nested like this - tags.Sender
+        const user = getNestedValue(item, userIdKey);
         const action = item.tags[tagActionKey];
         const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
 
@@ -152,7 +251,7 @@ export function totalUserActivity({actions, userIdKey}) {
     result.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     // write to file
-    fs.writeFileSync('totalUserActivity.json', JSON.stringify(result, null, 2));
+    fs.writeFileSync(dataDir+'/totalUserActivity.json', JSON.stringify(result, null, 2));
 
      // Calculate DAU, WAU, and MAU
      const calculateActiveUsers = (data, windowSize) => {
@@ -179,13 +278,13 @@ export function totalUserActivity({actions, userIdKey}) {
     }));
 
     // Write combined metrics to file
-    fs.writeFileSync('userActivityMetrics.json', JSON.stringify(combinedMetrics, null, 2));
+    fs.writeFileSync(dataDir+'/userActivityMetrics.json', JSON.stringify(combinedMetrics, null, 2));
 
 
     // Unique users - cumulative count of unique addresses sending messages over time
     const allUsers = new Set();
-    const uniqueUsers = data.reduce((acc, item) => {
-        const user = item.tags[userIdKey];
+    const uniqueUsers = fullData.reduce((acc, item) => {
+        const user = getNestedValue(item, userIdKey);
         const date = new Date(item.timestamp * 1000).toISOString().split('T')[0];
         allUsers.add(user);
         acc[date] = allUsers.size;
@@ -198,14 +297,15 @@ export function totalUserActivity({actions, userIdKey}) {
 
 
     // write to file
-    fs.writeFileSync('uniqueUsers.json', JSON.stringify(uniqueUsersArray, null, 2));
+    fs.writeFileSync(dataDir+'/uniqueUsers.json', JSON.stringify(uniqueUsersArray, null, 2));
 
-    return result;
+    return {totalUserActivity: result, userActivityMetrics: combinedMetrics, uniqueUsers: uniqueUsersArray};
     
 }
 
-export async function tokenBalances(tokenId) {
+export async function getTokenBalances(tokenId) {
     // call dry run on process
+    console.log("fetching token balances:", tokenId)
     const result = await dryrun({
         process: tokenId,
         tags: [
@@ -225,10 +325,22 @@ export async function tokenBalances(tokenId) {
     // make into an array of objects with address and quantity
     const balancesArray = Object.entries(sortedBalances).map(([address, quantity]) => ({ address, quantity }));
     // write to file
-    fs.writeFileSync('tokenBalances.json', JSON.stringify(balancesArray, null, 2));
+    fs.writeFileSync(dataDir+'/tokenBalances.json', JSON.stringify(balancesArray, null, 2));
 
+    return {tokenBalances: balancesArray};
 }
 
-totalUserActivity()
-// totalMessageActivity();
-// tokenBalances();
+
+
+
+// getData(OrbitProjectId, {name: "X-Action", value: "Post-Real-Data"})
+// getData(OrbitProjectId, {name: "X-Action", value: "Get-Real-Data"})
+
+
+const fullData = combineData()
+const {totalUserActivity, userActivityMetrics, uniqueUsers} = getUserActivityData(fullData)
+const {totalMessageActivity, totalMessageDistribution} = getMessageActivityData(fullData);
+const {tokenBalances} = await getTokenBalances(tokenId);
+
+// write to a ts file
+fs.writeFileSync(dataDir+'/data.ts', `export const messageDistribution = ${JSON.stringify(totalMessageDistribution, null, 2)};\nexport const messageActivity = ${JSON.stringify(totalMessageActivity, null, 2)};\nexport const uniqueUsersData = ${JSON.stringify(uniqueUsers, null, 2)};\nexport const userMetrics = ${JSON.stringify(userActivityMetrics, null, 2)};\nexport const tokenBalances = ${JSON.stringify(tokenBalances, null, 2)};\n`);

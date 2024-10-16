@@ -1,8 +1,10 @@
 
 
 export const OrbitActions = ["Get-Real-Data", "Post-Real-Data"];
+export const OrbitToken = "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc"
+export const OrbitProjectId = "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ"
 
-export function OrbitDataQuery(actionTag, cursor) {
+function OrbitDataQuery(actionTag, cursor) {
     if (!OrbitActions.includes(actionTag)) {
         throw new Error(`Invalid 0rbit action tag: ${actionTag}`);
     }
@@ -12,8 +14,7 @@ export function OrbitDataQuery(actionTag, cursor) {
     transactions(
         ${cursor ? `after: "${cursor}",` : ''}
         sort: HEIGHT_ASC,
-        recipients:["BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ"]
-        # owners: "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ"
+        recipients:["${OrbitProjectId}"]
         first: 200,
         tags: [
             {
