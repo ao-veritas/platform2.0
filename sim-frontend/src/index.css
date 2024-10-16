@@ -3,17 +3,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  background-color: #161515;
+}
 
 *{
     box-sizing: border-box;
     transition: all 0.9s;
 }
 /* ANIMS */
+@media screen and (min-width: 768px) {
 .fadeInScroll {
     animation: fade-in-scroll linear;
     animation-timeline: view();
   }
-  
+}  
   @keyframes fade-in-scroll {
     0% {
       opacity: 0;
@@ -188,4 +192,13 @@
     src: local("RalewayThin"),
       url("/_font/Raleway/static/Raleway-Thin.ttf") format("truetype");
   }
-  
+ 
+  .no-visible-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+   
+  .no-visible-scrollbar::-webkit-scrollbar {
+    display: none;
+  }

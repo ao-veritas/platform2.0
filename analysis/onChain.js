@@ -6,14 +6,23 @@ const project = {
         id:"",
         ticker:"",
         quantity:""
+    }, {
+        id:"",
+        ticker:"",
+        quantity:""
     }],
-    // balances
     distribution:[{
         id:"",
         quantity:""
+    }, {
+        id:"",
+        quantity:""
     }],
-    // week? day?
-    tokenFlowPerWeek:"",
+    tokenFlow:{
+        daily:"",
+        weekly:"",
+        monthly:"",
+    },
     messagesPerDay:"",
     uniqueUsers:{
         daily:"",
@@ -21,5 +30,11 @@ const project = {
         monthly:"",
         lifetime:""
     },
-    typesOfMessages:["",]
+    typesOfMessages:[{
+        name:"",
+        lastSixMonths:{
+            jan:"",
+            feb:"",
+        }
+    },]
 }

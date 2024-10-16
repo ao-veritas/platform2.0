@@ -4,8 +4,10 @@ import './index.css'
 import { ArweaveWalletKit } from 'arweave-wallet-kit'
 import AppRouter from './AppRouter.tsx'
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+
      <ArweaveWalletKit
       config={{
         permissions: ["SIGN_TRANSACTION", "ACCESS_ADDRESS"],
@@ -19,5 +21,6 @@ createRoot(document.getElementById('root')!).render(
     >
         <AppRouter />
     </ArweaveWalletKit>
+
   </StrictMode>,
 )

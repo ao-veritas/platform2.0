@@ -7,6 +7,7 @@ import Faucet from './_pages/Faucet';
 import User from './_pages/User';
 import About from './_pages/About';
 import Dashboard from './_pages/Dashboard';
+import ProjectRoute from './_pages/ProjectRoute';
 
 const AppRouter: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const AppRouter: React.FC = () => {
         <Route path="/faucet" element={<Faucet />} />
         <Route path="/user" element={<User />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/project/:processID" element={<ProjectRoute />} />
       </Routes>
     </Router>
   );

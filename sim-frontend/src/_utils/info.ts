@@ -1,5 +1,6 @@
 import {dryrun} from "@permaweb/aoconnect";
 const platformID = import.meta.env.VITE_PLATFORM_ID;
+const saturnTokenID = import.meta.env.VITE_SATURN_TOKEN_ID;
 
 type UserStakes = {
     UserID: string;
@@ -92,6 +93,8 @@ export const getProjectStake = async(projectID:String) =>{
 }
 
 
+
+
 export const getAllTransactions = async() => {
   let { Error, Messages } = await dryrun({
     process: platformID,
@@ -107,6 +110,21 @@ export const getAllTransactions = async() => {
   tempTable.map((transaction:Transaction) => {
         transactions.push(transaction)
   })
-  console.log("other:", transactions)
+  console.log("trans:", transactions)
   return transactions; 
+}
+
+export const pTokenRecieved = async(projectTokenId:String) => {
+  const userAddress = await window.arweaveWallet.getActiveAddress();
+  const transactionTable = await getAllTransactions();
+  let totalPToken = 0;
+  transactionTable?.map((transaction) => {
+    console.log("tran:", transaction)
+    console.log(userAddress, " ", projectTokenId )
+    if(transaction.UserID==userAddress && transaction.TokenID==saturnTokenID && transaction.Type == "ftu"){
+      totalPToken = totalPToken+Number(transaction.Quantity)
+    }
+  })
+  console.log("agg of ptokens recieved:", totalPToken);
+  return totalPToken;
 }
