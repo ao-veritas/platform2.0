@@ -1,16 +1,17 @@
 import { OrbitDataQuery } from "../fetch/queries/0rbit.js";
+import { dataQuery } from "./queries/dataQuery.js";
 import {parseGraphqlResponse} from "../fetch/utils/parseGraphqlResponse.js"
 import fs from "fs";
 import axios from 'axios';
 import { dryrun } from "@permaweb/aoconnect/node";
 
-const tagActionKey = "X-Action";
-const actions = ["Post-Real-Data", "Get-Real-Data"];
-const userIdKey = "Sender";
-const projectID = "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ";
-const tokenId = "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc"
+// const tagActionKey = "X-Action";
+// const actions = ["Post-Real-Data", "Get-Real-Data"];
+// const userIdKey = "Sender";
+// const projectID = "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ";
+// const tokenId = "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc"
 
-async function getData() {
+export async function getData(projectId, actionTag) {
     let allData = [];
     const fileName = "postOrbit.json";
     try {
@@ -23,7 +24,7 @@ async function getData() {
     }
     let cursor = null
     while (true) {
-        const query = OrbitDataQuery("Post-Real-Data", cursor);
+        const query = dataQuery(actionTag, cursor, projectId);
         const response =  await axios.post('https://arweave-search.goldsky.com/graphql', query, {
             headers: { 'Content-Type': 'application/json' }
         });
@@ -42,7 +43,7 @@ async function getData() {
     
 }
 
-function combineData() {
+export function combineData() {
     const postData = JSON.parse(fs.readFileSync('postOrbit.json', 'utf8'));
     const getData = JSON.parse(fs.readFileSync('getOrbit.json', 'utf8'));
 
@@ -56,7 +57,7 @@ function combineData() {
 
 
 // Total Message activity - y axis is the number of messages. X axis is time. Line graph for messages sent each day
-function totalMessageActivity() {
+export function totalMessageActivity({tagActionKey, actions}) {
     
     const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
     
@@ -114,7 +115,7 @@ function totalMessageActivity() {
 }
 
 // Total users - how many unique users sent a message each day. Y axis addresses that sent a message. X axis is time
-function totalUserActivity() {
+export function totalUserActivity({actions, userIdKey}) {
     const data = JSON.parse(fs.readFileSync('fullOrbit.json', 'utf8'));
     const userActivity = {};
 
@@ -203,7 +204,7 @@ function totalUserActivity() {
     
 }
 
-async function tokenBalances() {
+export async function tokenBalances(tokenId) {
     // call dry run on process
     const result = await dryrun({
         process: tokenId,
