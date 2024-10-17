@@ -1,10 +1,46 @@
 import { brandDarkBg } from "@/_utils/colors";
 import Navbar from "./Layout/Navbar";
 
-import OnChain0rbit from "./Dashboard/OnChain0rbit";
+// import OnChain0rbit from "./Dashboard/OnChain0rbit";
 import { Tabs } from "./ui/tabs";
+import Dashboard from "./Dashboard/Dashboard"
+import {
+  orbitMessageActivity,
+  orbitMessageDistribution,
+  orbitTokenBalances,
+  orbitUniqueUsersData,
+  orbitUserMetrics,
+} from "../../../analysis/fetch/data_files/BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ/data";
+import {
+  outcomeMessageActivity,
+  outcomeMessageDistribution,
+  outcomeTokenBalances, 
+  outcomeUniqueUsersData,
+  outcomeUserMetrics
+} from '../../../analysis/fetch/data_files/Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY/data'
+import {
+  apusMessageActivity,
+  apusMessageDistribution,
+  apusTokenBalances,
+  apusUniqueUsersData,
+  apusUserMetrics
+} from '../../../analysis/fetch/data_files/vp4pxoOsilVxdsRqTmLjP86CwwUwtj1RoKeGrFVxIVk/data'
 
-// Sample project data
+const orbit = {
+  name: "Orbit",
+  processID: "BaMK1dfayo75s3q1ow6AO64UDpD9SEFbeE8xYrY2fyQ",
+  tokenID: "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc",
+};
+const outcome = {
+  name: "Outcome",
+  processID: "Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY",
+  tokenID: "Dgs1OEsExsPRVcbe_3buCGf0suVKUFwMJFddqMhywbY"
+};
+const apus = {
+  name: "Apus",
+  processID: "vp4pxoOsilVxdsRqTmLjP86CwwUwtj1RoKeGrFVxIVk",
+  tokenID: "al1xXXnWnfJD8qyZJvttVGq60z1VPGn4M5y6uCcMBUM"
+};
 
 export default function ProjectDashboard() {
   // Prepare data for charts
@@ -26,22 +62,42 @@ export default function ProjectDashboard() {
     </>
   );
 }
+
+//Add dashboards with all the data required here, pass it as pr
 const tabs = [
   {
     title: "0rbit",
     value: "0rbit",
     content: (
       <div className="bg-[#161515] w-full py-3">
-        <OnChain0rbit />
+        <Dashboard project={orbit} messageActivity={orbitMessageActivity} messageDistribution={orbitMessageDistribution} tokenBalances={orbitTokenBalances} uniqueUsersData={orbitUniqueUsersData} userMetrics={orbitUserMetrics} />
       </div>
     ),
   },
+  {
+    title: "Outcome",
+    value: "Outcome",
+    content: (
+      <div className="bg-[#161515] w-full py-3">
+        <Dashboard project={outcome} messageActivity={outcomeMessageActivity} messageDistribution={outcomeMessageDistribution} tokenBalances={outcomeTokenBalances} uniqueUsersData={outcomeUniqueUsersData} userMetrics={outcomeUserMetrics} />
+      </div>
+    )
+  }, 
+  {
+    title: "Apus",
+    value: "Apus Network",
+    content: (
+      <div className="bg-[#161515] w-full py-3">
+        <Dashboard project={apus} messageActivity={apusMessageActivity} messageDistribution={apusMessageDistribution} tokenBalances={apusTokenBalances} uniqueUsersData={apusUniqueUsersData} userMetrics={apusUserMetrics}/>
+      </div>
+    )
+  }
   // {
   //   title: "BetterIDEa",
   //   value: "BetterIDEa",
   //   content: (
   //     <div className="bg-[#161515] w-full py-3">
-  //       <OnChain0rbit />
+  //       <Dashboard />
   //     </div>
   //   ),
   // },

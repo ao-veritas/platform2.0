@@ -1,4 +1,4 @@
-export const messageDistribution = [
+export const orbitMessageDistribution = [
   {
     "name": "Post-Real-Data",
     "count": 354
@@ -8,7 +8,7 @@ export const messageDistribution = [
     "count": 4371
   }
 ];
-export const messageActivity = [
+export const orbitMessageActivity = [
   {
     "date": "2024-05-24",
     "total": 2,
@@ -1110,7 +1110,7 @@ export const messageActivity = [
     }
   }
 ];
-export const uniqueUsersData = [
+export const orbitUniqueUsersData = [
   {
     "date": "2024-05-24",
     "count": 1
@@ -1552,7 +1552,7 @@ export const uniqueUsersData = [
     "count": 124
   }
 ];
-export const userMetrics = [
+export const orbitUserMetrics = [
   {
     "date": "2024-05-24",
     "dau": 1,
@@ -2214,7 +2214,7 @@ export const userMetrics = [
     "mau": 17
   }
 ];
-export const tokenBalances = [
+export const orbitTokenBalances = [
   {
     "address": "BUhZLMwQ6yZHguLtJYA5lLUa9LQzLXMXRfaq9FVcPJc",
     "quantity": 99334937847900000000
