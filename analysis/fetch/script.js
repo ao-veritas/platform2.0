@@ -21,23 +21,23 @@ import { dryrun } from "@permaweb/aoconnect/node";
 // const tokenId = OrbitToken
 
 // Apus
-// const tagActionKey = "Action";
-// const actions = ApusActions;
-// const userIdKey = "owner";
-// const projectId = ApusProjectProcessId
-// const tokenId = ApusToken
+const tagActionKey = "Action";
+const actions = ApusActions;
+const userIdKey = "owner";
+const projectId = ApusProjectProcessId
+const tokenId = ApusToken
 
 // Outcome
-const tagActionKey = "Action";
-const actions = ["Claim", "Buy"];
-const cursors = {
-    "Buy": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDQyNTU3LCItQmZJUEtkTVZ2U2RrZl9ldmtRSVNQVHJGWTdPaFlZUEVRVl83QnczQjM0Il0sImluZGV4IjoxNDA5OX0=",
-    "Claim": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDYzMjI2LCJRTFYxdnZJS0hLMk1aSi1PODE1RWw2RWNqZmJBUDFYajJOZ3NQN2U2ckZBIl0sImluZGV4IjoxNTY5OX0="
-}
-const userIdKey = "owner";
-const projectId = OutcomeProjectProcessId
-const tokenId = OutcomeToken
-const startingDate = "2024-06-01"
+// const tagActionKey = "Action";
+// const actions = ["Claim", "Buy"];
+// const cursors = {
+//     "Buy": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDQyNTU3LCItQmZJUEtkTVZ2U2RrZl9ldmtRSVNQVHJGWTdPaFlZUEVRVl83QnczQjM0Il0sImluZGV4IjoxNDA5OX0=",
+//     "Claim": "eyJzZWFyY2hfYWZ0ZXIiOlsxNDYzMjI2LCJRTFYxdnZJS0hLMk1aSi1PODE1RWw2RWNqZmJBUDFYajJOZ3NQN2U2ckZBIl0sImluZGV4IjoxNTY5OX0="
+// }
+// const userIdKey = "owner";
+// const projectId = OutcomeProjectProcessId
+// const tokenId = OutcomeToken
+// const startingDate = "2024-06-01"
 
 const dataDir = `data_files/${projectId}`
 const rawDataDir = `data_files/raw_data/${projectId}`;

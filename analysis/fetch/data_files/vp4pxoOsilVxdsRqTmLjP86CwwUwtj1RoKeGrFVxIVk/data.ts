@@ -73,35 +73,35 @@ export const messageActivity = [
 export const uniqueUsersData = [
   {
     "date": "2024-10-09",
-    "count": 1
+    "count": 10
   },
   {
     "date": "2024-10-10",
-    "count": 1
+    "count": 47
   },
   {
     "date": "2024-10-11",
-    "count": 1
+    "count": 111
   },
   {
     "date": "2024-10-12",
-    "count": 1
+    "count": 484
   },
   {
     "date": "2024-10-13",
-    "count": 1
+    "count": 804
   },
   {
     "date": "2024-10-14",
-    "count": 1
+    "count": 920
   },
   {
     "date": "2024-10-15",
-    "count": 1
+    "count": 1135
   },
   {
     "date": "2024-10-16",
-    "count": 1
+    "count": 1144
   }
 ];
 export const userMetrics = [
