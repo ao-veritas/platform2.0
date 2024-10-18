@@ -1,4 +1,4 @@
-export const messageDistribution = [
+export const outcomeMessageDistribution = [
   {
     "name": "Claim",
     "count": 67500
@@ -8,7 +8,7 @@ export const messageDistribution = [
     "count": 29600
   }
 ];
-export const messageActivity = [
+export const outcomeMessageActivity = [
   {
     "date": "2024-06-01",
     "total": 8438,
@@ -1390,7 +1390,7 @@ export const messageActivity = [
     }
   }
 ];
-export const uniqueUsersData = [
+export const outcomeUniqueUsersData = [
   {
     "date": "2024-06-01",
     "count": 2198
@@ -1944,7 +1944,7 @@ export const uniqueUsersData = [
     "count": 12774
   }
 ];
-export const userMetrics = [
+export const outcomeUserMetrics = [
   {
     "date": "2024-06-01",
     "dau": 2198,
@@ -2774,7 +2774,7 @@ export const userMetrics = [
     "mau": 155
   }
 ];
-export const tokenBalances = [
+export const outcomeTokenBalances = [
   {
     "address": "RVmHhTKsXIh2RrVFlqdLcYwy1WVsaqR5faGPV4pBx9A",
     "quantity": 1390000000000000

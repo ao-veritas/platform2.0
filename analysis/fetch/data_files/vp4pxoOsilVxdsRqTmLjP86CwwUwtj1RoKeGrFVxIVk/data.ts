@@ -1,10 +1,10 @@
-export const messageDistribution = [
+export const apusMessageDistribution = [
   {
     "name": "Create-Dataset",
     "count": 13501
   }
 ];
-export const messageActivity = [
+export const apusMessageActivity = [
   {
     "date": "2024-10-09",
     "total": 30,
@@ -70,7 +70,7 @@ export const messageActivity = [
     }
   }
 ];
-export const uniqueUsersData = [
+export const apusUniqueUsersData = [
   {
     "date": "2024-10-09",
     "count": 10
@@ -104,7 +104,7 @@ export const uniqueUsersData = [
     "count": 1144
   }
 ];
-export const userMetrics = [
+export const apusUserMetrics = [
   {
     "date": "2024-10-09",
     "dau": 10,
@@ -154,7 +154,7 @@ export const userMetrics = [
     "mau": 1144
   }
 ];
-export const tokenBalances = [
+export const apusTokenBalances = [
   {
     "address": "al1xXXnWnfJD8qyZJvttVGq60z1VPGn4M5y6uCcMBUM",
     "quantity": 538999999999600000
