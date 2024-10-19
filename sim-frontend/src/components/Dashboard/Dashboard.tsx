@@ -120,8 +120,8 @@ const Dashboard = ({ project, actionsTracked, messageActivity, messageDistributi
       {/* user stats */}
       <Card className="col-span-2">
         <CardHeader>
-          <CardTitle>Unique Users</CardTitle>
-          <CardDescription>Current user statistics as of {userMetrics[userMetrics.length - 1].date}</CardDescription>
+          <CardTitle>Unique Wallet Addresses</CardTitle>
+          <CardDescription>Current wallet statistics as of {userMetrics[userMetrics.length - 1].date}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
@@ -217,7 +217,7 @@ const Dashboard = ({ project, actionsTracked, messageActivity, messageDistributi
       {/* user metrics */}
       <Card className="col-span-4">
         <CardHeader>
-          <CardTitle>User Metrics</CardTitle>
+          <CardTitle>Wallet Metrics</CardTitle>
           <CardDescription>The DAU, WAU and MAU for the project</CardDescription>
         </CardHeader>
         <CardContent>
@@ -244,7 +244,7 @@ const Dashboard = ({ project, actionsTracked, messageActivity, messageDistributi
       {/* Lifetime Users */}
       <Card className="col-span-2">
         <CardHeader>
-          <CardTitle>Lifetime Users</CardTitle>
+          <CardTitle>Lifetime Wallets</CardTitle>
           <CardDescription>The total unique user growth</CardDescription>
         </CardHeader>
         <CardContent>
